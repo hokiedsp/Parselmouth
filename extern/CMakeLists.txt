@@ -15,4 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Parselmouth.  If not, see <http://www.gnu.org/licenses/>
 
-add_subdirectory(fmt)
+if (PREBUILT_DEPENDENCIES)
+	file(TO_CMAKE_PATH ${PREBUILT_DEPENDENCIES} PREBUILT_DEPENDENCIES_DIR)
+	include(${PREBUILT_DEPENDENCIES_DIR}/dependency_exports.cmake)
+else ()
+    add_subdirectory(fmt)
+
+    include(add_praat.cmake)
+
+	export(TARGETS praat fmt FILE dependency_exports.cmake)
+endif ()
+
+add_subdirectory(pybind11)

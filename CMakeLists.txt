@@ -33,14 +33,7 @@ if (MSVC)
 	endif ()
 endif ()
 
-if (PREBUILT_DEPENDENCIES)
-	file(TO_CMAKE_PATH ${PREBUILT_DEPENDENCIES} PREBUILT_DEPENDENCIES_DIR)
-	include(${PREBUILT_DEPENDENCIES_DIR}/dependency_exports.cmake)
-else ()
-	add_subdirectory(extern)
-	add_subdirectory(praat)
-	export(TARGETS praat fmt FILE dependency_exports.cmake)
-endif ()
+add_subdirectory(extern)
 
 # Currently, scikit-build does not support FindPython.
 if(SKBUILD)
@@ -54,7 +47,6 @@ endif()
 
 set(Python_FIND_IMPLEMENTATIONS CPython PyPy)
 find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
-add_subdirectory(pybind11)
 
 add_subdirectory(src)
 add_subdirectory(tests)
