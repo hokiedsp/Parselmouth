@@ -26,16 +26,19 @@
 
 #include "Harmonicity_docstrings.h"
 #include "TimeClassAspects.h"
+#include "Harmonicity_docstrings.h"
 
 #include <praat/fon/Harmonicity.h>
 
 namespace py = pybind11;
 using namespace py::literals;
 
-namespace parselmouth {
+namespace parselmouth
+{
 
-PRAAT_CLASS_BINDING(Harmonicity) {
-	addTimeFrameSampledMixin(*this);
+	PRAAT_CLASS_BINDING(Harmonicity)
+	{
+		addTimeFrameSampledMixin(*this);
 
   doc() = HARMONICITY_CLASS_DOCSTRING;
 
