@@ -29,9 +29,7 @@ jobs:
           python-version: '3.8'
 
       - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v1.7
-        with:
-          cmake-version: 3.19.5
+        uses: jwlawson/actions-setup-cmake@v1.8
 
       - name: Install requirements
         run: |
@@ -96,9 +94,7 @@ jobs:
           architecture: ${{ matrix.python-arch }}
 
       - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v1.7
-        with:
-          cmake-version: 3.19.5
+        uses: jwlawson/actions-setup-cmake@v1.8
 
       - name: Install requirements
         run: |

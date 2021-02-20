@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches-ignore:
-      - 'dependabot/*'
+      - 'dependabot/**'
   pull_request:
   workflow_dispatch:
 
@@ -117,9 +117,7 @@ jobs:
           architecture: ${{ matrix.arch }}
 
       - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v1.7
-        with:
-          cmake-version: 3.19.5
+        uses: jwlawson/actions-setup-cmake@v1.8
 
       - name: Install OpenBLAS on macOS for NumPy
         if: runner.os == 'macOS' && startsWith(matrix.python, 'pypy')
@@ -193,9 +191,7 @@ jobs:
           python-version: '3.8'
 
       - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v1.7
-        with:
-          cmake-version: 3.19.5
+        uses: jwlawson/actions-setup-cmake@v1.8
 
       - name: Install requirements
         run: |
