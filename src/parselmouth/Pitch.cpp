@@ -42,38 +42,34 @@
 namespace py = pybind11;
 using namespace py::literals;
 
-namespace parselmouth
-{
+namespace parselmouth {
 
-	PRAAT_ENUM_BINDING(PitchUnit)
-	{
-		value("HERTZ", kPitch_unit::HERTZ);
-		value("HERTZ_LOGARITHMIC", kPitch_unit::HERTZ_LOGARITHMIC);
-		value("MEL", kPitch_unit::MEL);
-		value("LOG_HERTZ", kPitch_unit::LOG_HERTZ); // TODO Huh? HERTZ_LOGARITHMIC and LOG_HERTZ!?
-		value("SEMITONES_1", kPitch_unit::SEMITONES_1);
-		value("SEMITONES_100", kPitch_unit::SEMITONES_100);
-		value("SEMITONES_200", kPitch_unit::SEMITONES_200);
-		value("SEMITONES_440", kPitch_unit::SEMITONES_440);
-		value("ERB", kPitch_unit::ERB);
+PRAAT_ENUM_BINDING(PitchUnit) {
+	value("HERTZ", kPitch_unit::HERTZ);
+	value("HERTZ_LOGARITHMIC", kPitch_unit::HERTZ_LOGARITHMIC);
+	value("MEL", kPitch_unit::MEL);
+	value("LOG_HERTZ", kPitch_unit::LOG_HERTZ); // TODO Huh? HERTZ_LOGARITHMIC and LOG_HERTZ!?
+	value("SEMITONES_1", kPitch_unit::SEMITONES_1);
+	value("SEMITONES_100", kPitch_unit::SEMITONES_100);
+	value("SEMITONES_200", kPitch_unit::SEMITONES_200);
+	value("SEMITONES_440", kPitch_unit::SEMITONES_440);
+	value("ERB", kPitch_unit::ERB);
 
-		make_implicitly_convertible_from_string(*this);
-	}
+	make_implicitly_convertible_from_string(*this);
+}
 
-	PRAAT_STRUCT_BINDING(Candidate, Pitch_Candidate)
-	{
-		def_readonly("frequency", &structPitch_Candidate::frequency); // TODO readwrite? Then we need to return references instead of copies in Pitch_Frame.
-		def_readonly("strength", &structPitch_Candidate::strength);
+PRAAT_STRUCT_BINDING(Candidate, Pitch_Candidate) {
+	def_readonly("frequency", &structPitch_Candidate::frequency); // TODO readwrite? Then we need to return references instead of copies in Pitch_Frame.
+	def_readonly("strength", &structPitch_Candidate::strength);
 
-		// TODO Reference to Pitch_Frame to have ".select()"?
-	}
+	// TODO Reference to Pitch_Frame to have ".select()"?
+}
 
-	PRAAT_STRUCT_BINDING(Frame, Pitch_Frame)
-	{
-		using PitchCandidate = structPitch_Candidate;
-		PYBIND11_NUMPY_DTYPE(PitchCandidate, frequency, strength);
+PRAAT_STRUCT_BINDING(Frame, Pitch_Frame) {
+	using PitchCandidate = structPitch_Candidate;
+	PYBIND11_NUMPY_DTYPE(PitchCandidate, frequency, strength);
 
-		def_readonly("intensity", &structPitch_Frame::intensity);
+	def_readonly("intensity", &structPitch_Frame::intensity);
 
 	def_property("selected",
 	        [](Pitch_Frame self) { return &self->candidates[1]; },
@@ -87,19 +83,17 @@ namespace parselmouth
 		        throw py::value_error("'candidate' is not a Pitch Candidate of this frame");
 	        });
 
-		def_property_readonly("candidates", [](Pitch_Frame self) { return std::vector<structPitch_Candidate>(&self->candidates[1], &self->candidates[self->nCandidates + 1]); });
+	def_property_readonly("candidates", [](Pitch_Frame self) { return std::vector<structPitch_Candidate>(&self->candidates[1], &self->candidates[self->nCandidates + 1]); });
 
-		def("unvoice",
-			[](Pitch_Frame self) {
-				for (long j = 1; j <= self->nCandidates; j++)
-				{
-					if (self->candidates[j].frequency == 0.0)
-					{
-						std::swap(self->candidates[1], self->candidates[j]);
-						break;
-					}
-				}
-			});
+	def("unvoice",
+	    [](Pitch_Frame self) {
+		    for (long j = 1; j <= self->nCandidates; j++) {
+			    if (self->candidates[j].frequency == 0.0) {
+				    std::swap(self->candidates[1], self->candidates[j]);
+				    break;
+			    }
+		    }
+	    });
 
 	def("select",
 	        [](Pitch_Frame self, Pitch_Candidate candidate) {
@@ -129,25 +123,24 @@ namespace parselmouth
 	    },
 	    "i"_a);
 
-		def("__len__",
-			[](Pitch_Frame self) { return self->nCandidates; });
+	def("__len__",
+	    [](Pitch_Frame self) { return self->nCandidates; });
 
-		def("as_array", [](Pitch_Frame self) { return py::array(self->nCandidates, &self->candidates[1], py::cast(self)); });
+	def("as_array", [](Pitch_Frame self) { return py::array(self->nCandidates, &self->candidates[1], py::cast(self)); });
 
-		// TODO __setitem__ ?
-		// TODO Make number of candidates changeable?
-	}
+	// TODO __setitem__ ?
+	// TODO Make number of candidates changeable?
+}
 
-	PRAAT_CLASS_BINDING(Pitch)
-	{
-		addTimeFrameSampledMixin(*this);
+PRAAT_CLASS_BINDING(Pitch) {
+	addTimeFrameSampledMixin(*this);
 
-		NESTED_BINDINGS(Pitch_Candidate,
-						Pitch_Frame)
+	NESTED_BINDINGS(Pitch_Candidate,
+	                Pitch_Frame)
 
-		using signature_cast_placeholder::_;
+	using signature_cast_placeholder::_;
 
-		// TODO Which constructors? From Sound?
+	// TODO Which constructors? From Sound?
 
 	def("to_sound_pulses",
 	    [](Pitch self, std::optional<double> fromTime, std::optional<double> toTime) { return Pitch_to_Sound(self, fromTime.value_or(self->xmin), toTime.value_or(self->xmax), false); },
@@ -173,7 +166,7 @@ namespace parselmouth
 	        },
 	        "time"_a, "unit"_a = kPitch_unit::HERTZ, "interpolation"_a = kVector_valueInterpolation::LINEAR);
 
-		// TODO get_strength_at_time ? -> Pitch strength unit enum
+	// TODO get_strength_at_time ? -> Pitch strength unit enum
 
 	def("get_value_in_frame",
 	        [](Pitch self, long frameNumber, kPitch_unit unit) {
@@ -182,7 +175,7 @@ namespace parselmouth
 	        },
 	        "frame_number"_a, "unit"_a = kPitch_unit::HERTZ);
 
-		// TODO Minimum, Time of minimum, Maximum, Time of maximum, ...
+	// TODO Minimum, Time of minimum, Maximum, Time of maximum, ...
 
 	def("get_mean_absolute_slope",
 	    [](Pitch self, kPitch_unit unit) {
@@ -216,12 +209,12 @@ namespace parselmouth
 	    },
 	    "unit"_a = kPitch_unit::HERTZ);
 
-		def("get_slope_without_octave_jumps",
-			[](Pitch self) {
-				double slope;
-				Pitch_getMeanAbsSlope_noOctave(self, &slope);
-				return slope;
-			});
+	def("get_slope_without_octave_jumps",
+	    [](Pitch self) {
+		    double slope;
+		    Pitch_getMeanAbsSlope_noOctave(self, &slope);
+		    return slope;
+	    });
 
 	def("count_differences",
 	        [](Pitch self, Pitch other) {
@@ -235,11 +228,11 @@ namespace parselmouth
 	        [](Pitch self, const std::u32string &formula) { Pitch_formula(self, formula.c_str(), nullptr); },
 	        "formula"_a);
 
-		// TODO To TextGrid..., To TextTier, To IntervalTier: depends TextGrid and Tiers
-		// TODO To PointProcess: depends on PointProcess
+	// TODO To TextGrid..., To TextTier, To IntervalTier: depends TextGrid and Tiers
+	// TODO To PointProcess: depends on PointProcess
 
-		def("interpolate",
-			&Pitch_interpolate);
+	def("interpolate",
+	    &Pitch_interpolate);
 
 	def("smooth",
 	    args_cast<_, Positive<_>>(Pitch_smooth),
@@ -252,7 +245,7 @@ namespace parselmouth
 	def("kill_octave_jumps",
 	    &Pitch_killOctaveJumps);
 
-		// TODO To PitchTier: depends on PitchTier
+	// TODO To PitchTier: depends on PitchTier
 
 	// TODO Not sure what to do with this, yet
 	def("to_point_process",
@@ -286,9 +279,9 @@ namespace parselmouth
 	def("to_matrix",
 	    &Pitch_to_Matrix);
 
-		def_readwrite("ceiling", &structPitch::ceiling);
+	def_readwrite("ceiling", &structPitch::ceiling);
 
-		def_readonly("max_n_candidates", &structPitch::maxnCandidates);
+	def_readonly("max_n_candidates", &structPitch::maxnCandidates);
 
 	def("get_frame",
 	        [](Pitch self, Positive<integer> frameNumber) {
@@ -317,16 +310,16 @@ namespace parselmouth
 	    },
 	    "ij"_a);
 
-		// TODO __setitem__
+	// TODO __setitem__
 
 	def("__iter__",
 	    [](Pitch self) { return py::make_iterator(&self->frames[1], &self->frames[self->nx + 1]); },
 	    py::keep_alive<0, 1>());
 
-		def("to_array",
-			[](Pitch self) {
-				auto maxCandidates = Pitch_getMaxnCandidates(self);
-				py::array_t<structPitch_Candidate> array({static_cast<size_t>(maxCandidates), static_cast<size_t>(self->nx)});
+	def("to_array",
+	    [](Pitch self) {
+		    auto maxCandidates = Pitch_getMaxnCandidates(self);
+		    py::array_t<structPitch_Candidate> array({static_cast<size_t>(maxCandidates), static_cast<size_t>(self->nx)});
 
 		    auto unchecked = array.mutable_unchecked<2>();
 		    for (auto i = 0; i < self->nx; ++i) {
@@ -336,32 +329,32 @@ namespace parselmouth
 			    }
 		    }
 
-				return array;
-			});
+		    return array;
+	    });
 
-		def_property_readonly("selected",
-							  [](Pitch self) {
-								  std::vector<structPitch_Candidate> vector;
-								  vector.reserve(self->nx);
-								  std::transform(&self->frames[1], &self->frames[self->nx + 1], std::back_inserter(vector), [](auto &frame) { return frame.candidates[1]; });
-								  return vector;
-							  });
+	def_property_readonly("selected",
+	                      [](Pitch self) {
+		                      std::vector<structPitch_Candidate> vector;
+		                      vector.reserve(self->nx);
+		                      std::transform(&self->frames[1], &self->frames[self->nx + 1], std::back_inserter(vector), [](auto &frame) { return frame.candidates[1]; });
+		                      return vector;
+	                      });
 
-		def_property_readonly("selected_array",
-							  [](Pitch self) {
-								  py::array_t<structPitch_Candidate> array(static_cast<size_t>(self->nx));
+	def_property_readonly("selected_array",
+	                      [](Pitch self) {
+		                      py::array_t<structPitch_Candidate> array(static_cast<size_t>(self->nx));
 
 		                      auto unchecked = array.mutable_unchecked<1>();
 		                      for (auto i = 0; i < self->nx; ++i) {
 			                      unchecked(i) = self->frames[i + 1].candidates[1];
 		                      }
 
-								  return array;
-							  });
+		                      return array;
+	                      });
 
-		def("path_finder",
-			args_cast<_, _, _, _, _, _, Positive<_>, bool>(Pitch_pathFinder),
-			"silence_threshold"_a = 0.03, "voicing_threshold"_a = 0.45, "octave_cost"_a = 0.01, "octave_jump_cost"_a = 0.35, "voiced_unvoiced_cost"_a = 0.14, "ceiling"_a = 600.0, "pull_formants"_a = false);
+	def("path_finder",
+	    args_cast<_, _, _, _, _, _, Positive<_>, bool>(Pitch_pathFinder),
+	    "silence_threshold"_a = 0.03, "voicing_threshold"_a = 0.45, "octave_cost"_a = 0.01, "octave_jump_cost"_a = 0.35, "voiced_unvoiced_cost"_a = 0.14, "ceiling"_a = 600.0, "pull_formants"_a = false);
 
 	def("step",
 	        [](Pitch self, double step, Positive<double> precision, std::optional<double> fromTime, std::optional<double> toTime) { Pitch_step(self, step, precision, fromTime.value_or(self->xmin), toTime.value_or(self->xmax)); },
