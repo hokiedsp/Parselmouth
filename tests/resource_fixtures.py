@@ -83,3 +83,7 @@ def script_path(resources):
 def harmonicity(sound):
 	return sound.to_harmonicity("CC")  # "AC", "GNE"
 	
+
+@pytest.fixture
+def point_process(pitch):
+	yield pitch.to_point_process()
