@@ -23,10 +23,6 @@
 
 #include "TimeClassAspects.h"
 
-// Added by @hokiedsp on 2/17/21
-#include "Pitch_docstrings.h"
-// End added by @hokiedsp on 2/17/21
-
 #include "utils/praat/MelderUtils.h"
 #include "utils/pybind11/ImplicitStringToEnumConversion.h"
 #include "utils/pybind11/NumericPredicates.h"
