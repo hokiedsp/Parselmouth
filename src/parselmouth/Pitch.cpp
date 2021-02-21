@@ -23,6 +23,10 @@
 
 #include "TimeClassAspects.h"
 
+// Added by @hokiedsp on 2/17/21
+#include "Pitch_docstrings.h"
+// End added by @hokiedsp on 2/17/21
+
 #include "utils/praat/MelderUtils.h"
 #include "utils/pybind11/ImplicitStringToEnumConversion.h"
 #include "utils/pybind11/NumericPredicates.h"
@@ -401,7 +405,24 @@ PRAAT_CLASS_BINDING(Pitch) {
 	        },
 	        "from_time"_a = std::nullopt, "to_time"_a = std::nullopt);
 
-	// TODO Pitch_Intensity_getMean & Pitch_Intensity_getMeanAbsoluteSlope ? (cfr. Intensity)
-}
+		// Added by @hokiedsp on 2/17/21
+		def(
+			"get_mean_strength", [](Pitch self, double tmin, double tmax, std::string type) {
+				const int strengthUnit =
+					(type == "ac") ? Pitch_STRENGTH_UNIT_AUTOCORRELATION : 
+					(type == "nhr")	? Pitch_STRENGTH_UNIT_NOISE_HARMONICS_RATIO : 
+					(type == "hnr_db") ? Pitch_STRENGTH_UNIT_HARMONICS_NOISE_DB : -1;
+
+				if (strengthUnit < 0)
+					throw py::value_error("Invalid mean strength measure type specified.");
+
+				return Pitch_getMeanStrength(self, tmin, tmax, strengthUnit);
+			},
+			"from_time"_a = 0.0, "to_time"_a = 0.0, "type"_a = "hnr_db", 
+			GET_MEAN_STRENGTH_DOCSTRING);
+		// End added by @hokiedsp on 2/17/21
+
+		// TODO Pitch_Intensity_getMean & Pitch_Intensity_getMeanAbsoluteSlope ? (cfr. Intensity)
+	}
 
 } // namespace parselmouth
