@@ -16,9 +16,21 @@
 # along with Parselmouth.  If not, see <http://www.gnu.org/licenses/>
 
 import pytest
+import numpy as np
 
 import parselmouth
 
+def test_init_sequence():
+	# instantiate
+	Mpm = parselmouth.Matrix(2,4)
+
+	# create numpy view of a row of matrix, element modifiable
+	for i in range(2):
+		for j in range(4):
+			Mpm[i][j] = i*4+j
+
+	# use iterator to create numpy 2d array from Praat matrix (copy)
+	print(np.array(Mpm))
 
 def test_raw_file(tmp_path):
 	r, c = 37, 23

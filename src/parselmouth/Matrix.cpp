@@ -36,7 +36,33 @@ namespace parselmouth {
 PRAAT_CLASS_BINDING(Matrix, py::buffer_protocol()) {
 	using signature_cast_placeholder::_;
 
-	// TODO Constructors (i.e., from numpy array, ...)
+	// TODO Review defaults (especially xmax & ymax) and their handling
+	def(
+		py::init([](Positive<int> nrows, Positive<int> ncols,
+					double xmin, double xmax, Positive<double> dx, double x1,
+					double ymin, double ymax, Positive<double> dy, double y1) {
+			if (xmax <= xmin)
+				xmax = xmin + nrows;
+			if (ymax <= ymin)
+				ymax = ymin + ncols;
+			return Matrix_create(xmin, xmax, ncols, dx, x1,
+									ymin, ymax, nrows, dy, y1);
+		}),
+		"nrows"_a, "ncols"_a,
+		"xmin"_a = 0.5, "xmax"_a = 0.0, "dx"_a = 1.0, "x1"_a = 1.0,
+		"ymin"_a = 0.5, "ymax"_a = 0.0, "dy"_a = 1.0, "y1"_a = 1.0);
+
+	// def("__len__") <- inherits from Sampled
+	def(
+		"__getitem__",
+		[](Matrix self, long i) {
+			if (i < 0)
+				i += self->nx;
+			if (i < 0 || i >= self->nx)
+				throw std::out_of_range("index out of range");
+			return py::array(self->nx, self->z.cells + i * self->nx, py::cast(self));
+		},
+		"i"_a, py::return_value_policy::reference_internal);
 
 	def_property("values", // TODO Check Row-major/column-major things
 	             [](Matrix self) { return py::array_t<double, py::array::c_style>({static_cast<size_t>(self->ny), static_cast<size_t>(self->nx)}, &self->z[1][1], py::cast(self)); },
