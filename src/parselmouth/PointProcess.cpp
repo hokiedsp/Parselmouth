@@ -34,6 +34,7 @@
 #include <praat/fon/VoiceAnalysis.h>
 
 #include <algorithm>
+#include <stdexcept>
 #include <tuple>
 #include <vector>
 
