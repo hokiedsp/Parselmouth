@@ -20,8 +20,7 @@
 #include "Parselmouth.h"
 
 #include "TimeClassAspects.h"
-
-#include "utils/pybind11/ImplicitStringToEnumConversion.h"
+#include "Intensity_enums.h" // for AveragingMethod
 
 #include <praat/fon/Intensity.h>
 
@@ -32,12 +31,13 @@ using namespace py::literals;
 
 namespace parselmouth {
 
-enum class AveragingMethod {
-	MEDIAN = Intensity_averaging_MEDIAN,
-	ENERGY = Intensity_averaging_ENERGY,
-	SONES = Intensity_averaging_SONES,
-	DB = Intensity_averaging_DB
-};
+PRAAT_ENUM_BINDING(IntensityUnits) {
+	value("ENERGY", IntensityUnits::ENERGY);
+	value("SONES", IntensityUnits::SONES);
+	value("DB", IntensityUnits::DB);
+
+	make_implicitly_convertible_from_string(*this);
+}
 
 PRAAT_ENUM_BINDING(AveragingMethod) {
 	value("MEDIAN", AveragingMethod::MEDIAN);
@@ -52,6 +52,7 @@ PRAAT_CLASS_BINDING(Intensity) {
 	addTimeFrameSampledMixin(*this);
 
 	NESTED_BINDINGS(AveragingMethod)
+	NESTED_BINDINGS(IntensityUnits)
 
 	// TODO Get value in frame
 

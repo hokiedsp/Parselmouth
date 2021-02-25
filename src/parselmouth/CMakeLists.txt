@@ -17,14 +17,19 @@
 
 target_sources(parselmouth PRIVATE
     CC.cpp
+    Cepstrum.cpp
     Data.cpp
     Formant.cpp
     Function.cpp
     Harmonicity.cpp
     Intensity.cpp
+    Ltas.cpp
     Matrix.cpp
     MFCC.cpp
     Pitch.cpp
+    PowerCepstrum.cpp
+    PowerCepstrogram.cpp
+    PointProcess.cpp
     Sampled.cpp
     SampledXY.cpp
     Sound.cpp

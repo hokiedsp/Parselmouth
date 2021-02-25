@@ -46,16 +46,21 @@ def pitch(sound):
 
 
 @pytest.fixture
+def point_process(pitch):
+	yield pitch.to_point_process()
+
+
+@pytest.fixture
 def spectrogram(sound):
 	yield sound.to_spectrogram()
 
 
-@combined_fixture('intensity', 'pitch', 'spectrogram', 'sound')
+@combined_fixture('sound', 'intensity', 'pitch', 'spectrogram')
 def sampled(request):
 	yield request.param
 
 
-@combined_fixture('sampled')
+@combined_fixture('sampled', 'point_process')
 def thing(request):
 	yield request.param
 
@@ -73,3 +78,8 @@ def text_grid(text_grid_path):
 @pytest.fixture
 def script_path(resources):
 	yield resources["script.praat"]
+
+@pytest.fixture
+def harmonicity(sound):
+	return sound.to_harmonicity("CC")  # "AC", "GNE"
+	

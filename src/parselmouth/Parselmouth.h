@@ -34,6 +34,9 @@ enum class kSound_windowShape;
 enum class kSounds_convolve_scaling;
 enum class kSounds_convolve_signalOutsideTimeDomain;
 enum class kVector_valueInterpolation;
+enum class kVector_peakInterpolation;
+enum class kCepstrumTrendType;
+enum class kCepstrumTrendFit;
 
 namespace parselmouth::detail {
 
@@ -76,12 +79,15 @@ namespace parselmouth {
 enum class SoundFileFormat;
 
 using ValueInterpolation = kVector_valueInterpolation;
+using PeakInterpolation = kVector_peakInterpolation;
 using WindowShape = kSound_windowShape;
 using AmplitudeScaling = kSounds_convolve_scaling;
 using SignalOutsideTimeDomain = kSounds_convolve_signalOutsideTimeDomain;
 using SpectralAnalysisWindowShape = kSound_to_Spectrogram_windowShape;
 using FormantUnit = kFormant_unit;
 using PitchUnit = kPitch_unit;
+using CepstrumTrendType = kCepstrumTrendType;
+using CepstrumTrendFit = kCepstrumTrendFit;
 
 } // parselmouth
 

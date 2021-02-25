@@ -31,6 +31,7 @@ using namespace py::literals;
 using namespace std::string_literals;
 
 Thing_declare(CC);
+Thing_declare(Cepstrum);
 Thing_declare(Daata);
 Thing_declare(Formant);
 Thing_declare(Function);
@@ -40,6 +41,9 @@ Thing_declare(Intensity);
 Thing_declare(Matrix);
 Thing_declare(MFCC);
 Thing_declare(Pitch);
+Thing_declare(PowerCepstrum);
+Thing_declare(PowerCepstrogram);
+Thing_declare(PointProcess);
 Thing_declare(Sampled);
 Thing_declare(SampledXY);
 Thing_declare(TextGrid);
@@ -120,6 +124,7 @@ using PraatBindings = Bindings<PraatError,
                                PraatWarning,
                                PraatFatal,
                                ValueInterpolation,
+							   PeakInterpolation,
                                WindowShape,
                                AmplitudeScaling,
                                SignalOutsideTimeDomain,
@@ -140,12 +145,18 @@ using PraatBindings = Bindings<PraatError,
                                Spectrum,
                                Spectrogram,
                                Pitch,
+                               PointProcess,
                                Intensity,
                                Harmonicity,
                                Formant,
                                CC,
                                MFCC,
                                TextGrid,
+							   Cepstrum,
+							   CepstrumTrendType,
+							   CepstrumTrendFit,
+							   PowerCepstrum,
+							   PowerCepstrogram,
                                PraatModule>;
 
 } // namespace parselmouth

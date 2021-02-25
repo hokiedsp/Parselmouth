@@ -23,9 +23,11 @@
 #include "utils/pybind11/NumericPredicates.h"
 
 #include <praat/dwtools/Spectrum_extensions.h>
+#include <praat/fon/Ltas.h>
 #include <praat/fon/Spectrum.h>
 #include <praat/fon/Spectrum_and_Spectrogram.h>
 #include <praat/fon/Sound_and_Spectrum.h>
+#include <praat/LPC/Cepstrum_and_Spectrum.h>
 
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
@@ -262,6 +264,16 @@ PRAAT_CLASS_BINDING(Spectrum) {
 	def("to_spectrogram",
 	    &Spectrum_to_Spectrogram);
 
+	def("to_cepstrum", &Spectrum_to_Cepstrum);
+
+	def("to_cepstrum_hillenbrand", &Spectrum_to_Cepstrum_hillenbrand);
+
+	//FORM (NEW_Spectrum_to_Ltas, U"Spectrum: To Long-term average spectrum", nullptr)
+	def("to_ltas",&Spectrum_to_Ltas,"bandwidth"_a=1000.0);
+
+	// DIRECT (NEW_Spectrum_to_Ltas_1to1)
+	def("to_ltas_1to1",&Spectrum_to_Ltas_1to1);
+	
 	// TODO More stuff in praat_David_init, for some reason
 }
 
