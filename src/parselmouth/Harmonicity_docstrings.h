@@ -85,8 +85,8 @@ See Also
 
 constexpr auto GET_VALUE_DOCSTRING = R"(Get estimated local HNR
 
-Returns the HNR estimate (in dB) at a specified time. If this time is 
-outside the time domain or outside the samples of the Harmonicity, the 
+Returns the HNR estimate (in dB) at a specified time. If this time is
+outside the time domain or outside the samples of the Harmonicity, the
 result is undefined.
 
 Parameters
@@ -111,7 +111,7 @@ number of frames, the result is undefined.
 Parameters
 ----------
 frame_number : int
-    The 1-base index of the target frame 
+    The 1-base index of the target frame
 
 See Also
 --------
@@ -130,7 +130,7 @@ from_time : double=0.0
 to_time : double=0.0
     The ending time of the analysis time domain. Values outside this domain
     are ignored. If `to_time` is not greater than `from_time`, the entire
-    time domain of the Harmonicity object is considered. 
+    time domain of the Harmonicity object is considered.
 
 interpolation : {'NONE', 'PARABOLIC', 'CUBIC', 'SINC70', 'SINC700'},
                 default='PARABOLIC'
@@ -153,7 +153,7 @@ from_time : double=0.0
 to_time : double=0.0
     The ending time of the analysis time domain. Values outside this domain
     are ignored. If `to_time` is not greater than `from_time`, the entire
-    time domain of the Harmonicity object is considered. 
+    time domain of the Harmonicity object is considered.
 
 See Also
 --------
@@ -172,7 +172,7 @@ from_time : double=0.0
 to_time : double=0.0
     The ending time of the analysis time domain. Values outside this domain
     are ignored. If `to_time` is not greater than `from_time`, the entire
-    time domain of the Harmonicity object is considered. 
+    time domain of the Harmonicity object is considered.
 
 interpolation : {'NONE', 'PARABOLIC', 'CUBIC', 'SINC70', 'SINC700'},
                 default='PARABOLIC'
@@ -195,7 +195,7 @@ from_time : double=0.0
 to_time : double=0.0
     The ending time of the analysis time domain. Values outside this domain
     are ignored. If `to_time` is not greater than `from_time`, the entire
-    time domain of the Harmonicity object is considered. 
+    time domain of the Harmonicity object is considered.
 
 See Also
 --------
@@ -214,7 +214,7 @@ from_time : double=0.0
 to_time : double=0.0
     The ending time of the analysis time domain. Values outside this domain
     are ignored. If `to_time` is not greater than `from_time`, the entire
-    time domain of the Harmonicity object is considered. 
+    time domain of the Harmonicity object is considered.
 
 interpolation : {'NONE', 'PARABOLIC', 'CUBIC', 'SINC70', 'SINC700'},
                 default='PARABOLIC'
@@ -237,7 +237,7 @@ from_time : double=0.0
 to_time : double=0.0
     The ending time of the analysis time domain. Values outside this domain
     are ignored. If `to_time` is not greater than `from_time`, the entire
-    time domain of the Harmonicity object is considered. 
+    time domain of the Harmonicity object is considered.
 
 interpolation : {'NONE', 'PARABOLIC', 'CUBIC', 'SINC70', 'SINC700'},
                 default='PARABOLIC'
