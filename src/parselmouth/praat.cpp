@@ -475,10 +475,10 @@ command : str
 
 Keyword Arguments
 -----------------
-extra_objects : list of parselmouth.Data, default: ``[]``
+extra_objects : list of parselmouth.Data, default ``[]``
     Extra objects added to the Praat object list that will not be selected
     when the command is called.
-return_string : bool, default: False
+return_string : bool, default False
     Return the raw string written in the Praat info window instead of the
     converted Python object.
 
@@ -566,13 +566,13 @@ script : str
 
 Keyword arguments
 -----------------
-extra_objects : list of parselmouth.Data, default: ``[]``
+extra_objects : list of parselmouth.Data, default ``[]``
     Extra objects added to the Praat object list that will not be selected
     when the command is called.
-capture_output : bool, default: False
+capture_output : bool, default False
     Intercept and also return the output written to the Praat info window,
     instead of forwarding it to the Python standard output; see below.
-return_variables : bool, default: False
+return_variables : bool, default False
     Also return a `dict` of the Praat variables and their values at the
     end of the script's execution; see below.
 
@@ -642,7 +642,7 @@ path : str
 
 Keyword arguments
 -----------------
-keep_cwd : bool, default: False
+keep_cwd : bool, default False
     Keep the current working directory (see `os.getcwd`) when running the
     script, rather than changing it to the script's parent directory, as
     Praat does by default. Note that even when set to `True`, the
