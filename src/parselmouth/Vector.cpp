@@ -42,6 +42,7 @@ PRAAT_ENUM_BINDING(ValueInterpolation) {
 	make_implicitly_convertible_from_string(*this);
 }
 
+
 PRAAT_ENUM_BINDING(PeakInterpolation)
 {
 	value("NONE", kVector_peakInterpolation::NONE);
@@ -120,14 +121,13 @@ PRAAT_CLASS_BINDING(Vector) {
 	    args_cast<_, Positive<_>>(Vector_scale),
 	    "scale"_a);
 
-		def("scale_peak",
-			args_cast<_, Positive<_>>(Vector_scale),
-			"new_peak"_a = 0.99);
+	def("scale_peak",
+	    args_cast<_, Positive<_>>(Vector_scale),
+	    "new_peak"_a = 0.99);
 
-		def(
-			"get_value", // TODO Default for interpolation? Different for Sound (SINC70), Harmonicity/Intensity/Formants (CUBIC) and Ltas (LINEAR); take praat_TimeFunction.h into account
-			[](Vector self, double x, std::optional<long> channel, kVector_valueInterpolation interpolation) { return Vector_getValueAtX(self, x, channel.value_or(Vector_CHANNEL_AVERAGE), interpolation); },
-			"x"_a, "channel"_a = std::nullopt, "interpolation"_a = kVector_valueInterpolation::CUBIC);
-	}
+	def("get_value", // TODO Default for interpolation? Different for Sound (SINC70), Harmonicity/Intensity/Formants (CUBIC) and Ltas (LINEAR); take praat_TimeFunction.h into account
+	    [](Vector self, double x, std::optional<long> channel, kVector_valueInterpolation interpolation) { return Vector_getValueAtX (self, x, channel.value_or(Vector_CHANNEL_AVERAGE), interpolation); },
+	    "x"_a, "channel"_a = std::nullopt, "interpolation"_a = kVector_valueInterpolation::CUBIC);
+}
 
 } // namespace parselmouth
