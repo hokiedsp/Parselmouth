@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021  Yannick Jadoul
+ * Copyright (C) 2021  Yannick Jadoul and contributors
  *
  * This file is part of Parselmouth.
  *
@@ -199,7 +199,7 @@ PRAAT_CLASS_BINDING(PointProcess) {
 	    SHIMMER_RANGE_ARGS, GET_SHIMMER_LOCAL_DOCSTRING);
 
 	// REAL_Point_Sound_getShimmer_local_dB
-	def("get_shimmer_local_dB",
+	def("get_shimmer_local_db",
 	    SHIMMER_RANGE_FUNCTION(PointProcess_Sound_getShimmer_local_dB),
 	    SHIMMER_RANGE_ARGS,
 	    GET_SHIMMER_LOCAL_DB_DOCSTRING);
