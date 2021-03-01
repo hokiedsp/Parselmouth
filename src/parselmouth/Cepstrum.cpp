@@ -24,6 +24,7 @@
 #include <praat/LPC/Sound_and_Cepstrum.h>
 #include <praat/LPC/PowerCepstrogram.h>
 
+#include "Cepstrum_docstrings.h"
 #include "../utils/pybind11/ImplicitStringToEnumConversion.h"
 
 namespace parselmouth {
@@ -43,9 +44,15 @@ PRAAT_ENUM_BINDING(CepstrumTrendFit) {
 }
 
 PRAAT_CLASS_BINDING(Cepstrum) {// based on Spectrum class
-	def("to_spectrum", &Cepstrum_to_Spectrum);
-	def("to_sound", &Cepstrum_to_Sound);
-	def("to_power_cepstrum", &Cepstrum_downto_PowerCepstrum);
+
+	doc() = CLASS_DOCSTRING;
+
+	def("__len__", [](Cepstrum self) { return self->nx; });
+	def("__getitem__", [](Cepstrum self, int i){ return self->z.cells[i]; });
+
+	def("to_spectrum", &Cepstrum_to_Spectrum, TO_SPECTRUM_DOCSTRING);
+	def("to_sound", &Cepstrum_to_Sound, TO_SOUND_DOCSTRING);
+	def("to_power_cepstrum", &Cepstrum_downto_PowerCepstrum, TO_POWER_CEPSTRUM_DOCSTRING);
 }
 
 }// namespace parselmouth

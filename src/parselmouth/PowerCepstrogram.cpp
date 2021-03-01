@@ -18,85 +18,103 @@
  */
 
 #include "Parselmouth.h"
+#include "PowerCepstrogram_docstrings.h"
 
 #include <praat/LPC/PowerCepstrogram.h>
 
 namespace py = pybind11;
 using namespace py::literals;
 
-namespace parselmouth {
+namespace parselmouth
+{
 
-PRAAT_CLASS_BINDING(PowerCepstrogram) {// based on Spectrum class
+	PRAAT_CLASS_BINDING(PowerCepstrogram)
+	{ // based on Spectrum class
 
-	def("smooth", &PowerCepstrogram_smooth,
-	    "time_averaging_window"_a = 0.02, "quefrency_averaging_window"_a = 0.0005);
+		doc() = CLASS_DOCSTRING;
 
-	def("get_start_quefrency", [](PowerCepstrogram self) { return self->ymin; });
+		def("smooth", &PowerCepstrogram_smooth,
+			"time_averaging_window"_a = 0.02, "quefrency_averaging_window"_a = 0.0005,
+			SMOOTH_DOCSTRING);
 
-	def("get_end_quefrency", [](PowerCepstrogram self) { return self->ymax; });
+		def(
+			"get_start_quefrency", [](PowerCepstrogram self) { return self->ymin; },
+			GET_START_QUEFRENCY_DOCSTRING);
 
-	def("get_number_of_quefrency_bins", [](PowerCepstrogram self) { self->ny; });
+		def(
+			"get_end_quefrency", [](PowerCepstrogram self) { return self->ymax; },
+			GET_END_QUEFRENCY_DOCSTRING);
 
-	def("get_quefrency_step", [](PowerCepstrogram self) { self->dy; });
+		def(
+			"get_number_of_quefrency_bins", [](PowerCepstrogram self) { self->ny; },
+			GET_NUMBER_OF_QUEFRENCY_BINS_DOCSTRING);
 
-	def("subtract_trend", &PowerCepstrogram_subtractTrend,
-	    "left_trend_line_quefrency_range"_a = 0.001,
-	    "right_trend_line_quefrency_range"_a = 0.05,
-	    "trend_type"_a = kCepstrumTrendType::DEFAULT,
-	    "fit_method"_a = kCepstrumTrendFit::DEFAULT);
+		def(
+			"get_quefrency_step", [](PowerCepstrogram self) { self->dy; },
+			GET_QUEFRENCY_STEP_DOCSTRING);
 
-	def("subtract_trend_inplace", &PowerCepstrogram_subtractTrend_inplace,
-	    "left_trend_line_quefrency_range"_a = 0.001,
-	    "right_trend_line_quefrency_range"_a = 0.05,
-	    "trend_type"_a = kCepstrumTrendType::DEFAULT,
-	    "fit_method"_a = kCepstrumTrendFit::DEFAULT);
+		def("subtract_trend", &PowerCepstrogram_subtractTrend,
+			"left_trend_line_quefrency_range"_a = 0.001,
+			"right_trend_line_quefrency_range"_a = 0.05,
+			"trend_type"_a = kCepstrumTrendType::DEFAULT,
+			"fit_method"_a = kCepstrumTrendFit::DEFAULT,
+			SUBTRACT_TREND_DOCSTRING);
 
-	def("get_cpps_hillenbrand", &PowerCepstrogram_getCPPS_hillenbrand,
-	    "subtract_trend_before_smoothing"_a = true,
-	    "time_averaging_window"_a = 0.001, "quefrency_averaging_window"_a = 0.00005,
-	    "left_peak_search_pitch_range"_a = 60.0,
-	    "right_peak_search_pitch_range"_a = 330.0);
+		def("subtract_trend_inplace", &PowerCepstrogram_subtractTrend_inplace,
+			"left_trend_line_quefrency_range"_a = 0.001,
+			"right_trend_line_quefrency_range"_a = 0.05,
+			"trend_type"_a = kCepstrumTrendType::DEFAULT,
+			"fit_method"_a = kCepstrumTrendFit::DEFAULT,
+			SUBTRACT_TREND_INPLACE_DOCSTRING);
 
-	def("get_cpps", &PowerCepstrogram_getCPPS,
-	    "subtract_trend_before_smoothing"_a = true,
-	    "time_averaging_window"_a = 0.02, "quefrency_averaging_window"_a = 0.0005,
-	    "left_peak_search_pitch_range"_a = 60.0,
-	    "right_peak_search_pitch_range"_a = 330.0, "tolerance"_a = 0.05,
-	    "interpolation"_a = kVector_peakInterpolation ::PARABOLIC,
-	    "left_trend_line_quefrency_range"_a = 0.001,
-	    "right_trend_line_quefrency_range"_a = 0.05,
-	    "trend_type"_a = kCepstrumTrendType::DEFAULT,
-	    "fit_method"_a = kCepstrumTrendFit::DEFAULT);
+		def("get_cpps_hillenbrand", &PowerCepstrogram_getCPPS_hillenbrand,
+			"subtract_trend_before_smoothing"_a = true,
+			"time_averaging_window"_a = 0.001, "quefrency_averaging_window"_a = 0.00005,
+			"left_peak_search_pitch_range"_a = 60.0,
+			"right_peak_search_pitch_range"_a = 330.0,
+			GET_CPPS_HILLENBRAND_DOCSTRING);
 
-	// FORM (MODIFY_PowerCepstrogram_formula, U"PowerCepstrogram: Formula", nullptr) {
-	// 	TEXTFIELD (formula, U"   Replace all values with:", U"sqrt(self)")
+		def("get_cpps", &PowerCepstrogram_getCPPS,
+			"subtract_trend_before_smoothing"_a = true,
+			"time_averaging_window"_a = 0.02, "quefrency_averaging_window"_a = 0.0005,
+			"left_peak_search_pitch_range"_a = 60.0,
+			"right_peak_search_pitch_range"_a = 330.0, "tolerance"_a = 0.05,
+			"interpolation"_a = kVector_peakInterpolation ::PARABOLIC,
+			"left_trend_line_quefrency_range"_a = 0.001,
+			"right_trend_line_quefrency_range"_a = 0.05,
+			"trend_type"_a = kCepstrumTrendType::DEFAULT,
+			"fit_method"_a = kCepstrumTrendFit::DEFAULT,
+			GET_CPPS_DOCSTRING);
 
-	def("to_power_cepstrum", &PowerCepstrogram_to_PowerCepstrum_slice,
-	    "time"_a = 0.1);
+		// FORM (MODIFY_PowerCepstrogram_formula, U"PowerCepstrogram: Formula", nullptr) {
+		// 	TEXTFIELD (formula, U"   Replace all values with:", U"sqrt(self)")
 
-	// FORM(NEW_PowerCepstrogram_to_Table_cpp, U"PowerCepstrogram: To Table (peak prominence)", U"PowerCepstrogram: To Table (peak prominence)...") {
-	// 	REAL(fromPitch, U"left Peak search pitch range (Hz)", U"60.0")
-	// 	REAL(toPitch, U"right Peak search pitch range (Hz)", U"330.0")
-	// 	POSITIVE(tolerance, U"Tolerance (0-1)", U"0.05")
-	// 	RADIO_ENUM(kVector_peakInterpolation, peakInterpolationType,
-	// 	           U"Interpolation", kVector_peakInterpolation ::PARABOLIC)
-	// 	REAL(fromQuefrency_trendLine, U"left Trend line quefrency range (s)", U"0.001")
-	// 	REAL(toQuefrency_trendLine, U"right Trend line quefrency range (s)", U"0.05)")
-	// 	OPTIONMENU_ENUM(kCepstrumTrendType, lineType, U"Trend type", kCepstrumTrendType::DEFAULT)
-	// 	OPTIONMENU_ENUM(kCepstrumTrendFit, fitMethod, U"Fit method", kCepstrumTrendFit::DEFAULT)
-	// 	autoTable result = PowerCepstrogram_to_Table_cpp(me, fromPitch, toPitch, tolerance, peakInterpolationType, fromQuefrency_trendLine, toQuefrency_trendLine, lineType, fitMethod);
-	// }
+		def("to_power_cepstrum", &PowerCepstrogram_to_PowerCepstrum_slice,
+			"time"_a, TO_POWER_CEPSTRUM_DOCSTRING);
 
-	// FORM(NEW_PowerCepstrogram_to_Table_hillenbrand, U"PowerCepstrogram: To Table (hillenbrand)", U"PowerCepstrogram: To Table (peak prominence...") {
-	// 	REAL(fromPitch, U"left Peak search pitch range (Hz)", U"60.0")
-	// 	REAL(toPitch, U"right Peak search pitch range (Hz)", U"330.0")
-	// 	autoTable result = PowerCepstrogram_to_Table_hillenbrand(me, fromPitch, toPitch);
-	// }
+		// FORM(NEW_PowerCepstrogram_to_Table_cpp, U"PowerCepstrogram: To Table (peak prominence)", U"PowerCepstrogram: To Table (peak prominence)...") {
+		// 	REAL(fromPitch, U"left Peak search pitch range (Hz)", U"60.0")
+		// 	REAL(toPitch, U"right Peak search pitch range (Hz)", U"330.0")
+		// 	POSITIVE(tolerance, U"Tolerance (0-1)", U"0.05")
+		// 	RADIO_ENUM(kVector_peakInterpolation, peakInterpolationType,
+		// 	           U"Interpolation", kVector_peakInterpolation ::PARABOLIC)
+		// 	REAL(fromQuefrency_trendLine, U"left Trend line quefrency range (s)", U"0.001")
+		// 	REAL(toQuefrency_trendLine, U"right Trend line quefrency range (s)", U"0.05)")
+		// 	OPTIONMENU_ENUM(kCepstrumTrendType, lineType, U"Trend type", kCepstrumTrendType::DEFAULT)
+		// 	OPTIONMENU_ENUM(kCepstrumTrendFit, fitMethod, U"Fit method", kCepstrumTrendFit::DEFAULT)
+		// 	autoTable result = PowerCepstrogram_to_Table_cpp(me, fromPitch, toPitch, tolerance, peakInterpolationType, fromQuefrency_trendLine, toQuefrency_trendLine, lineType, fitMethod);
+		// }
 
-	// DIRECT(NEW_PowerCepstrogram_to_Matrix) {
-	// 	CONVERT_EACH(PowerCepstrogram)
-	// 	autoMatrix result = PowerCepstrogram_to_Matrix(me);
-	// 	CONVERT_EACH_END(my name.get())
-	// }
-}
-}// namespace parselmouth
+		// FORM(NEW_PowerCepstrogram_to_Table_hillenbrand, U"PowerCepstrogram: To Table (hillenbrand)", U"PowerCepstrogram: To Table (peak prominence...") {
+		// 	REAL(fromPitch, U"left Peak search pitch range (Hz)", U"60.0")
+		// 	REAL(toPitch, U"right Peak search pitch range (Hz)", U"330.0")
+		// 	autoTable result = PowerCepstrogram_to_Table_hillenbrand(me, fromPitch, toPitch);
+		// }
+
+		// DIRECT(NEW_PowerCepstrogram_to_Matrix) {
+		// 	CONVERT_EACH(PowerCepstrogram)
+		// 	autoMatrix result = PowerCepstrogram_to_Matrix(me);
+		// 	CONVERT_EACH_END(my name.get())
+		// }
+	}
+} // namespace parselmouth

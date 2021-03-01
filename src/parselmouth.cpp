@@ -37,6 +37,7 @@ Thing_declare(Formant);
 Thing_declare(Function);
 Thing_declare(Harmonicity);
 Thing_declare(Intensity);
+Thing_declare(Ltas);
 Thing_declare(Matrix);
 Thing_declare(MFCC);
 Thing_declare(Pitch);
@@ -156,6 +157,7 @@ using PraatBindings = Bindings<PraatError,
 							   CepstrumTrendFit,
 							   PowerCepstrum,
 							   PowerCepstrogram,
+							   Ltas,
                                PraatModule>;
 
 } // namespace parselmouth

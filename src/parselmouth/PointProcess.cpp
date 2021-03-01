@@ -32,6 +32,7 @@
 #include <praat/fon/Sound_PointProcess.h>
 #include <praat/fon/TextGrid.h>
 #include <praat/fon/VoiceAnalysis.h>
+#include <praat/fon/Ltas.h>
 
 #include <algorithm>
 #include <tuple>
@@ -387,8 +388,23 @@ PRAAT_CLASS_BINDING(PointProcess) {
 	// NEW_PointProcess_upto_TextTier
 	// NEW1_PointProcess_Sound_to_AmplitudeTier_period
 	// NEW1_PointProcess_Sound_to_AmplitudeTier_point
-	// NEW1_PointProcess_Sound_to_Ltas
-	// NEW1_PointProcess_Sound_to_Ltas_harmonics
-}
+
+	//FORM (NEW1_PointProcess_Sound_to_Ltas
+	def(
+		"to_ltas",
+		[](PointProcess self, Sound sound, Positive<double> maximumFrequency, Positive<double> bandwidth, double shortestPeriod, double longestPeriod, Positive<double> maximumPeriodFactor) { return PointProcess_Sound_to_Ltas(self, sound,
+																																																								 maximumFrequency, bandwidth, shortestPeriod, longestPeriod, maximumPeriodFactor); },
+		"sound"_a.none(false), "maximum_frequency"_a = 5000.0, "bandwidth"_a = 100.0,
+		"shortest_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3);
+
+	//FORM(NEW1_PointProcess_Sound_to_Ltas_harmonics
+	def(
+		"to_ltas_harmonics",
+		[](PointProcess self, Sound sound, Positive<int> maximumHarmonic, double shortestPeriod, double longestPeriod, Positive<double> maximumPeriodFactor) {
+			return PointProcess_Sound_to_Ltas_harmonics(self, sound,
+														maximumHarmonic, shortestPeriod, longestPeriod, maximumPeriodFactor);
+		},
+		"sound"_a.none(false), "maximum_harmonic"_a = 20, "shortest_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3);
+	}
 
 }// namespace parselmouth

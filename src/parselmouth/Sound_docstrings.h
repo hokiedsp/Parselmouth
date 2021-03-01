@@ -123,6 +123,94 @@ See Also
 parselmouth.PointProcess
 )";
 
+constexpr auto TO_CEPSTRUM_DOCSTRING =
+	R"(Create a new `Cepstrum` instance.
+
+See Also
+--------
+:obj:`parselmouth.Cepstrum`
+)";
+
+constexpr auto TO_LTAS_DOCSTRING =
+	R"(Create a new `Ltas` instance.
+
+Parameter
+---------
+bandwidth : float, default 100.0
+    Bandwidth of LTAS in Hz
+
+See Also
+--------
+:obj:`parselmouth.Ltas`
+:obj:`parselmouth.Sound.to_ltas_pitchcorrected`
+)";
+
+constexpr auto TO_LTAS_PITCHCORRECTED_DOCSTRING =
+	R"(Create a new `Ltas` instance.
+
+It tries to compute an LTAS of the spectral envelope of the voiced parts,
+correcting away the influence of F0 in a way that does not sacrifice
+frequency selectivity. The resulting LTAS is meant to reflect only the
+resonances (formants) in the vocal tract and the envelope of the glottal
+source spectrum.
+
+The analysis method is described in Boersma & Kovacic (2006).
+
+Parameters
+----------
+minimum_pitch : float, default 75.0
+maximum_pitch : float, default 600.0
+maximum_frequency : float, default 5000.0
+bandwidth : float, default 100.0
+shortest_period : float, default 0.0001
+longest_period : float, default 0.02
+maximum_period_factor : float, default 1.3
+
+See Also
+--------
+:praat:`Sound: To Ltas (pitch-corrected)...`
+:obj:`parselmouth.Ltas`
+:obj:`parselmouth.Sound.to_ltas`
+)";
+
+constexpr auto TO_POWER_CEPSTROGRAM_DOCSTRING =
+	R"(Create a new `PowerCepstrum` instance.
+
+The sound will first be resampled to twice the value of `maximum_frequency`
+with the algorithm described at :func:`resample`. After this, pre-emphasis
+is applied with the algorithm described at :func:`pre_emphasize`. For each
+analysis window a Gaussian window is applied and the spectrum is
+calculated. The spectrum is then transformed to a PowerCepstrum with the
+procedure described at :func:`parselmouth.Spectrum.to_powercepstrum`.
+Finally, the values from the PowerCepstrum are stored in the vertical slice
+of the PowerCepstrogram.
+
+Parameters
+----------
+pitch_floor : float, default 60.0
+time_step : float, default 0.002
+maximum_frequency : float, default 5000.0
+pre_emphasis_from : float, default 50.0
+
+See Also
+--------
+:praat:`Sound: To PowerCepstrogram...`
+:obj:`parselmouth.Power Cepstrogram`
+)";
+
+constexpr auto TO_POWER_CEPSTROGRAM_HILLENBRAND_DOCSTRING =
+	R"(Create a new `PowerCepstrum` instance.
+
+Parameters
+----------
+pitch_floor : float, default 60.0
+time_step : float, default 0.002
+
+See Also
+--------
+:obj:`parselmouth.PowerCepstrogram`
+)";
+
 } // namespace parselmouth
 
 #endif // INC_PARSELMOUTH_SOUND_DOCSTRINGS_H
