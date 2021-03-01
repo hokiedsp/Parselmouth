@@ -19,6 +19,7 @@
 
 #include "Parselmouth.h"
 #include "TimeClassAspects.h"
+#include "Sound_docstrings.h"
 
 #include "utils/SignatureCast.h"
 #include "utils/praat/MelderUtils.h"
