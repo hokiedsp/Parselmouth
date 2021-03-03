@@ -11,13 +11,13 @@ a frame of acoustic data samples.
 
 Note that the $a_0=1$ coefficient is omitted in a.
 
-This class is instantiated in :object:`~parselmouth.LPC` object and not
+This class is instantiated in :obj:`~parselmouth.LPC` object and not
 intended to be instantiated by user.
 
 See also
 --------
 :praat:`Sound: LPC analysis`
-:object:`~parselmouth.LPC`
+:obj:`~parselmouth.LPC`
 )";
 
 constexpr auto FRAME_N_COEFFICIENTS = R"(int : Number of AR coefficients a used to model the frame)";
@@ -36,17 +36,18 @@ The i-th item of this object is a :func:`LPC.Frame<parselmouth.LPC.Frame>`
 object representing the i-th frame.
 
 In the LPC analysis one tries to predict xn on the basis of the p previous
-samples, x′n = ∑ ak xn-k then {a1, a2, ..., ap} can be chosen to minimize
-the prediction power Qp where Qp = E[ |xn - x′n|2 ].
+samples, :math:`x_n^' = \sum_{k=1}^p {a_k x_{n-k}}` then
+:math:`{a_1, a_2, \ldots, a_p}` can be chosen to minimize the prediction
+power :math:`Q_p` where :math:`Q_p = E[ |x_n - x_n^'|^2 ]`.
 
 This class is not intended to be instantiated by user, instead from a
-:object:`~parselmouth.Sound` object using one of its to_lpc_xxx()
+:obj:`~parselmouth.Sound` object using one of its to_lpc_xxx()
 methods.
 
 See Also
 --------
 :praat:`Sound: LPC analysis`
-:object:`parselmouth.LPC.Frame`
+:obj:`parselmouth.LPC.Frame`
 :func:`parselmouth.Sound.to_lpc_autocorrelation`
 :func:`parselmouth.Sound.to_lpc_covariance`
 :func:`parselmouth.Sound.to_lpc_burg`
@@ -58,39 +59,39 @@ constexpr auto MAX_N_COEFFICIENTS_DOCSTRING = R"(Largest number of coefficients 
 
 constexpr auto TO_LINE_SPECTRAL_FREQUENCIES=R"(Convert to line spectra.
 
-Returns :object:`parselmouth.LineSpectralFrequencies` object with the
+Returns :obj:`parselmouth.LineSpectralFrequencies` object with the
 line frequencies found in the LPC models.
 
 Parameter
 ----------
-grid_size : float, default=0.0
+grid_size : float, default 0.0
     TBD
-
+   
 See also
 --------
-:object:`parselmouth.LineSpectralFrequencies`
+:obj:`parselmouth.LineSpectralFrequencies`
 )";
 
 
 constexpr auto TO_SPECTRUM_SLICE_DOCSTRING=R"(Convert to spectrogram.
 
-Returns :object:`parselmouth.Spectrum` object with the spectral
+Returns :obj:`parselmouth.Spectrum` object with the spectral
 representation of the LPC model found at specified time t.
 
 The Spectrum at t will be calculated from the nearest
-:object:`~parselmouth.LPC.Frame`. See :praat:`LPC: To Spectrum (slice)...`
+:obj:`~parselmouth.LPC.Frame`. See :praat:`LPC: To Spectrum (slice)...`
 for dedailed algorithm description.
 
 Parameters
 ----------
 time : float
     Time at which the spectrum should be calculated.
-
-minimum_frequency_resolution : float, default=20.0
+   
+minimum_frequency_resolution : float, default 20.0
     Maximum distance separation of successive frequencies in the Spectrum,
     in Hz
 
-bandwidth_reduction : float, default=0.0
+bandwidth_reduction : float, default 0.0
     Reduces the bandwidth of each zero by this factor (<=0.0 for no
     reduction). Formants with small bandwidths show up very well as darker
     regions in the spectrogram because the poles lie close to the contour
@@ -98,9 +99,10 @@ bandwidth_reduction : float, default=0.0
     Peak enhancement can be realized by computing a spectrum in the z-plane
     along a contour of radius:
 
-        r = exp (– pi x bandwidthReduction / samplingFrequency).
+        :math:`r = exp \left(– \pi \times
+            \frac{bandwidthReduction}{samplingFrequency}\right)`.
 
-deemphasis_frequency : float, default=50.0
+deemphasis_frequency : float, default 50.0
     Performs de-emphasis when value is in this interval, specified in Hz.
     (0, Nyquist frequency)
 
@@ -111,7 +113,7 @@ See also
 
 constexpr auto TO_SPECTROGRAM_DOCSTRING=R"(Convert to spectrogram.
 
-Returns :object:`parselmouth.Spectrogram` object with the spectral
+Returns :obj:`parselmouth.Spectrogram` object with the spectral
 representation of the LPC models.
 
 For each LPC_Frame the corresponding Spectrum will be calculated according
@@ -121,11 +123,11 @@ in the corresponding area in the Spectrogram.
 
 Parameters
 ----------
-minimum_frequency_resolution : float, default=20.0
+minimum_frequency_resolution : float, default 20.0
     Maximum distance separation of successive frequencies in the Spectrum,
     in Hz
 
-bandwidth_reduction : float, default=0.0
+bandwidth_reduction : float, default 0.0
     Reduces the bandwidth of each zero by this factor (<=0.0 for no
     reduction). Formants with small bandwidths show up very well as darker
     regions in the spectrogram because the poles lie close to the contour
@@ -133,15 +135,46 @@ bandwidth_reduction : float, default=0.0
     Peak enhancement can be realized by computing a spectrum in the z-plane
     along a contour of radius:
 
-        r = exp (– pi x bandwidthReduction / samplingFrequency).
+        :math:`r = exp \left(– \pi \times
+            \frac{bandwidthReduction}{samplingFrequency}\right)`.
 
-deemphasis_frequency : float, default=50.0
+deemphasis_frequency : float, default 50.0
     Performs de-emphasis when value is in this interval, specified in Hz.
     (0, Nyquist frequency)
 
 See also
 --------
 :praat:`LPC: To Spectrogram...`
+)";
+
+constexpr auto TO_LPC_ROBUST_DOCSTRING = R"(
+Modify LPC coefficients using Huber's M-estimation approach.
+
+Parameters
+----------
+sound : parselmouth.Sound
+    Sound object originally used to generate this LPC object
+
+window_length : float, default 0.025
+    LPC frame size in seconds used to generate this LPC object
+
+preemphasis_frequency : float, default 50.0
+    +6dB / octave filtering will be applied above this frequency. If you do
+    not want pre-emphasis, choose a frequency greater than the Nyquist 
+    frequency. 
+
+number_of_std_dev : float, default 1.5
+    TBD
+
+maximum_number_of_iterations : int, default 5
+    Maximum number of iterations for Newton's algorithm 
+
+tolerance : float, default 0.000001
+    Newton's algorithm termination criterion on change in coefficients
+
+variable_location : bool, default False
+    TBD
+
 )";
 
 }// namespace parselmouth

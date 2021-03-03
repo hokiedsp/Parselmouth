@@ -128,8 +128,8 @@ See Also
 
 constexpr auto TO_LPC_AUTOCORRELATION_DOCSTRING = R"(Create LPC using autocorrelation method.
 
-Run linear predictive coding (LPC) analysis with the autocorrelation
-method and returns a new :object:`~parselmouth.LPC` object containing the
+Run linear predictive coding (LPC) analysis with the autocorrelation 
+method and returns a new :obj:`~parselmouth.LPC` object containing the
 analysis outcomes.
 
 The autocorrelation algorithm is decribed in Markel & Gray (1976).
@@ -161,7 +161,7 @@ preemphasis_frequency : float, default=50.0
 See Also
 --------
 :praat:`Sound: To LPC (autocorrelation)...`
-:object:`~parselmouth.LPC`
+:obj:`~parselmouth.LPC`
 :func:`~parselmouth.Sound.to_lpc_covariance`
 :func:`~parselmouth.Sound.to_lpc_burg`
 :func:`~parselmouth.Sound.to_lpc_marple`
@@ -170,7 +170,7 @@ See Also
 constexpr auto TO_LPC_COVARIANCE_DOCSTRING = R"(Create LPC using covariance method.
 
 Run linear predictive coding (LPC) analysis with the covariance method and
-returns a new :object:`~parselmouth.LPC` object containing the analysis
+returns a new :obj:`~parselmouth.LPC` object containing the analysis 
 outcomes.
 
 The covariance algorithm is decribed in Markel & Gray (1976).
@@ -202,7 +202,7 @@ preemphasis_frequency : float, default=50.0
 See Also
 --------
 :praat:`Sound: To LPC (covariance)...`
-:object:`~parselmouth.LPC`
+:obj:`~parselmouth.LPC`
 :func:`~parselmouth.Sound.to_lpc_autocorrelation`
 :func:`~parselmouth.Sound.to_lpc_burg`
 :func:`~parselmouth.Sound.to_lpc_marple`
@@ -210,8 +210,8 @@ See Also
 
 constexpr auto TO_LPC_BURG_DOCSTRING = R"(Create LPC using Burg's method.
 
-Run linear predictive coding (LPC) analysis with the Burg's method and
-returns a new :object:`~parselmouth.LPC` object containing the analysis
+Run linear predictive coding (LPC) analysis with the Burg's method and 
+returns a new :obj:`~parselmouth.LPC` object containing the analysis 
 outcomes.
 
 Burg's algorithm is described in Anderson (1978)
@@ -243,7 +243,7 @@ preemphasis_frequency : float, default=50.0
 See Also
 --------
 :praat:`Sound: To LPC (burg)...`
-:object:`~parselmouth.LPC`
+:obj:`~parselmouth.LPC`
 :func:`~parselmouth.Sound.to_lpc_autocorrelation`
 :func:`~parselmouth.Sound.to_lpc_covariance`
 :func:`~parselmouth.Sound.to_lpc_marple`
@@ -252,7 +252,7 @@ See Also
 constexpr auto TO_LPC_MARPLE_DOCSTRING = R"(Create LPC using Marple's method.
 
 Run linear predictive coding (LPC) analysis with the Marple's method and
-returns a new :object:`~parselmouth.LPC` object containing the analysis
+returns a new :obj:`~parselmouth.LPC` object containing the analysis 
 outcomes.
 
 The algorithm is described in Marple (1980).
@@ -291,7 +291,7 @@ tolerance 2 : float, default=1e-6
 See Also
 --------
 :praat:`Sound: To LPC (marple)...`
-:object:`~parselmouth.LPC`
+:obj:`~parselmouth.LPC`
 :func:`~parselmouth.Sound.to_lpc_autocorrelation`
 :func:`~parselmouth.Sound.to_lpc_covariance`
 :func:`~parselmouth.Sound.to_lpc_burg`
