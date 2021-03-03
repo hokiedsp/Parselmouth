@@ -66,7 +66,7 @@ Parameter
 ----------
 grid_size : float, default 0.0
     TBD
-   
+
 See also
 --------
 :obj:`parselmouth.LineSpectralFrequencies`
@@ -86,7 +86,7 @@ Parameters
 ----------
 time : float
     Time at which the spectrum should be calculated.
-   
+
 minimum_frequency_resolution : float, default 20.0
     Maximum distance separation of successive frequencies in the Spectrum,
     in Hz
@@ -160,14 +160,14 @@ window_length : float, default 0.025
 
 preemphasis_frequency : float, default 50.0
     +6dB / octave filtering will be applied above this frequency. If you do
-    not want pre-emphasis, choose a frequency greater than the Nyquist 
-    frequency. 
+    not want pre-emphasis, choose a frequency greater than the Nyquist
+    frequency.
 
 number_of_std_dev : float, default 1.5
     TBD
 
 maximum_number_of_iterations : int, default 5
-    Maximum number of iterations for Newton's algorithm 
+    Maximum number of iterations for Newton's algorithm
 
 tolerance : float, default 0.000001
     Newton's algorithm termination criterion on change in coefficients
