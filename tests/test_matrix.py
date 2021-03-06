@@ -25,12 +25,16 @@ def test_init_sequence():
 	Mpm = parselmouth.Matrix(2,4)
 
 	# create numpy view of a row of matrix, element modifiable
+	M = np.arange(8,dtype=int).reshape((2,4))
 	for i in range(2):
-		for j in range(4):
-			Mpm[i][j] = i*4+j
+		Mpm[i] = M[i]
+		# Mpm[i][:] = M[i]
 
 	# use iterator to create numpy 2d array from Praat matrix (copy)
-	print(np.array(Mpm))
+	print(M, np.array(Mpm))
+	assert np.all(np.array(Mpm)==M)
+	assert np.all(Mpm.as_array()==M)
+	assert np.all(Mpm.values==M)
 
 def test_raw_file(tmp_path):
 	r, c = 37, 23

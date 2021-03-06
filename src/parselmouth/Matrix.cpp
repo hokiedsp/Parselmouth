@@ -64,6 +64,18 @@ PRAAT_CLASS_BINDING(Matrix, py::buffer_protocol()) {
 		},
 		"i"_a, py::return_value_policy::reference_internal);
 
+	def("__setitem__",
+		[](Matrix self, long i, py::array_t<double, 0> values) {
+			if (i < 0)
+				i += self->nx;
+			if (i < 0 || i >= self->nx)
+				throw std::out_of_range("index out of range");
+			if (values.ndim() != 1 && values.size() != self->nx)
+				throw py::value_error("Row values of a Matrix must be given as a 1-D numpy float array of the correct size");
+
+			std::copy_n(values.data(),  self->nx, self->z.cells + i * self->nx);
+		});
+
 	def_property("values", // TODO Check Row-major/column-major things
 	             [](Matrix self) { return py::array_t<double, py::array::c_style>({static_cast<size_t>(self->ny), static_cast<size_t>(self->nx)}, &self->z[1][1], py::cast(self)); },
 	             [](Matrix self, py::array_t<double, 0> values) {
@@ -98,7 +110,8 @@ PRAAT_CLASS_BINDING(Matrix, py::buffer_protocol()) {
 	             });
 
 	def("as_array",
-	    [](Matrix self) { return py::array_t<double, py::array::c_style>({static_cast<size_t>(self->ny), static_cast<size_t>(self->nx)}, &self->z[1][1], py::cast(self)); });
+	    [](Matrix self) { return py::array_t<double, py::array::c_style>({static_cast<size_t>(self->ny), static_cast<size_t>(self->nx)}, &self->z[1][1], py::cast(self)); }, 
+		py::return_value_policy::reference_internal);
 
 	def_buffer([](Matrix self) { return py::buffer_info(&self->z[1][1], {static_cast<ssize_t>(self->ny), static_cast<ssize_t>(self->nx)}, {static_cast<ssize_t>(self->nx * sizeof(double)), static_cast<ssize_t>(sizeof(double))}); });
 
