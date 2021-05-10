@@ -32,21 +32,6 @@ using namespace py::literals;
 
 namespace parselmouth {
 
-PRAAT_ENUM_BINDING(ValueInterpolation) {
-	value("NEAREST", kVector_valueInterpolation::NEAREST);
-	value("LINEAR", kVector_valueInterpolation::LINEAR);
-	value("CUBIC", kVector_valueInterpolation::CUBIC);
-	value("SINC70", kVector_valueInterpolation::SINC70);
-	value("SINC700", kVector_valueInterpolation::SINC700);
-
-	make_implicitly_convertible_from_string(*this);
-}
-
-
-PRAAT_ENUM_BINDING(PeakInterpolation)
-namespace parselmouth
-{
-
 	PRAAT_ENUM_BINDING(ValueInterpolation)
 	{
 		value("NEAREST", kVector_valueInterpolation::NEAREST);
