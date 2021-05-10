@@ -30,6 +30,7 @@
 #include <praat/dwtools/Sound_extensions.h>
 #include <praat/dwtools/Sound_to_MFCC.h>
 #include <praat/dwtools/Sound_to_Pitch2.h>
+#include <praat/fon/Ltas.h>
 #include <praat/fon/Sound.h>
 #include <praat/fon/Sound_and_Spectrogram.h>
 #include <praat/fon/Sound_and_Spectrum.h>
@@ -37,6 +38,8 @@
 #include <praat/fon/Sound_to_Harmonicity.h>
 #include <praat/fon/Sound_to_Intensity.h>
 #include <praat/fon/Sound_to_Pitch.h>
+#include <praat/LPC/Sound_and_Cepstrum.h>
+#include <praat/LPC/PowerCepstrogram.h>
 #include <praat/fon/Sound_to_PointProcess.h>
 
 #include <pybind11/numpy.h>
@@ -627,7 +630,8 @@ PRAAT_CLASS_BINDING(Sound) {
 	        },
 	        "number_of_coefficients"_a = 12, "window_length"_a = 0.015, "time_step"_a = 0.005, "firstFilterFreqency"_a = 100.0, "distance_between_filters"_a = 100.0, "maximum_frequency"_a = std::nullopt);
 
-	// FORM (NEW_Sound_to_PointProcess_extrema
+	// FORM (NEW_Sound_to_PointProcess_extrema, U"Sound: To PointProcess
+	// (extrema)", nullptr)
 	def(
 		"to_point_process_extrema",
 		[](Sound self, Channel channel, bool includeMaxima, bool includeMinima,
@@ -641,7 +645,8 @@ PRAAT_CLASS_BINDING(Sound) {
 		"interpolation"_a = kVector_peakInterpolation::SINC70,
 		TO_POINT_PROCESS_EXTREMA_DOCSTRING);
 
-	// FORM (NEW_Sound_to_PointProcess_periodic_cc
+	// FORM (NEW_Sound_to_PointProcess_periodic_cc, U"Sound: To PointProcess
+	// (periodic, cc)", U"Sound: To PointProcess (periodic, cc)...") {
 	def(
 		"to_point_process_periodic",
 		[](Sound self, float minimumPitch, float maximumPitch) {
@@ -654,7 +659,8 @@ PRAAT_CLASS_BINDING(Sound) {
 		"minimum_pitch"_a = 75.0, "maximum_pitch"_a = 600.0,
 		TO_POINT_PROCESS_PERIODIC_DOCSTRING);
 
-	// FORM (NEW_Sound_to_PointProcess_periodic_peaks
+	// FORM (NEW_Sound_to_PointProcess_periodic_peaks, U"Sound: To PointProcess
+	// (periodic, peaks)", U"Sound: To PointProcess (periodic, peaks)...") {
 	def(
 		"to_point_process_periodic_peaks",
 		[](Sound self, float minimumPitch, float maximumPitch, bool includeMaxima,
@@ -669,7 +675,7 @@ PRAAT_CLASS_BINDING(Sound) {
 		"include_maxima"_a = true, "include_minima"_a = false,
 		TO_POINT_PROCESS_PERIODIC_PEAKS_DOCSTRING);
 
-	// FORM (NEW_Sound_to_PointProcess_zeroes
+	// FORM (NEW_Sound_to_PointProcess_zeroes, U"Get zeroes", nullptr) {
 	def(
 		"to_point_process_zeros",
 		[](Sound self, Channel ch, bool includeRaisers, bool includeFallers) {
@@ -717,6 +723,26 @@ PRAAT_CLASS_BINDING(Sound) {
 		TO_LPC_MARPLE_DOCSTRING);
 
 	// TODO Still a bunch of Sound in praat_LPC_init.cpp
+
+	def("to_cepstrum", &Sound_to_Cepstrum, TO_CEPSTRUM_DOCSTRING);
+
+	// FORM (NEW_Sound_to_Ltas, U"Sound: To long-term average spectrum", nullptr)
+	def("to_ltas", &Sound_to_Ltas, "bandwidth"_a = 100.0, TO_LTAS_DOCSTRING);
+
+	// FORM (NEW_Sound_to_Ltas_pitchCorrected, U"Sound: To Ltas (pitch-corrected)", U"Sound: To Ltas (pitch-corrected)...")
+	def("to_ltas_pitch_corrected", &Sound_to_Ltas_pitchCorrected,
+		"minimum_pitch"_a = 75.0, "maximum_pitch"_a = 600.0,
+		"maximum_frequency"_a = 5000.0, "bandwidth"_a = 100.0,
+		"shortest_period"_a = 0.0001, "longest_period"_a = 0.02,
+		"maximum_period_factor"_a = 1.3, TO_LTAS_PITCHCORRECTED_DOCSTRING);
+
+	// FORM (NEW_Sound_to_PowerCepstrogram, U"Sound: To PowerCepstrogram", U"Sound: To PowerCepstrogram...")
+	def("to_power_cepstrogram", &Sound_to_PowerCepstrogram, "pitch_floor"_a = 60.0, "time_step"_a = 0.002,
+	    "maximum_frequency"_a = 5000.0, "pre_emphasis_from"_a = 50.0, TO_POWER_CEPSTROGRAM_DOCSTRING);
+
+	// FORM (NEW_Sound_to_PowerCepstrogram_hillenbrand, U"Sound: To PowerCepstrogram (hillenbrand)", U"Sound: To PowerCepstrogram...")
+	def("to_power_cepstrogram_hillenbrand", &Sound_to_PowerCepstrogram_hillenbrand, "pitch_floor"_a = 60.0,
+	    "time_step"_a = 0.002, TO_POWER_CEPSTROGRAM_HILLENBRAND_DOCSTRING);
 }
 
 } // namespace parselmouth

@@ -17,6 +17,7 @@
 
 target_sources(parselmouth PRIVATE
     CC.cpp
+    Cepstrum.cpp
     Data.cpp
     Formant.cpp
     Function.cpp
@@ -24,9 +25,12 @@ target_sources(parselmouth PRIVATE
     Intensity.cpp
     LineSpectralFrequencies.cpp
     LPC.cpp
+    Ltas.cpp
     Matrix.cpp
     MFCC.cpp
     Pitch.cpp
+    PowerCepstrum.cpp
+    PowerCepstrogram.cpp
     PointProcess.cpp
     Sampled.cpp
     SampledXY.cpp

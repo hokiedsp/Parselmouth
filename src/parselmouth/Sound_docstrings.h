@@ -31,24 +31,23 @@ without pitch estimation.
 
 Parameters
 ----------
-channel : {"LEFT", "RIGHT"}, default="LEFT" (first channel)
+channel : {"LEFT", "RIGHT"}, default "LEFT" (first channel)
     Sound channel to process.
 
-include_maxima : bool, default=True
+include_maxima : bool, default True
     True to include the absolute maximum.
 
-include_minima : bool, default=False
+include_minima : bool, default False
     True to include the absolute minimum.
 
 interpolation : {"NONE", "PARABOLIC", "CUBIC", "SINC70", "SINC700"},
-                default="SINC70"
+                default: "SINC70"
     Peak-picking interpolation method.
 
 See Also
 --------
-:class:`parselmouth.PointProcess`
-:func:`parselmouth.Sound.to_pitch_ac`
-:func:`parselmouth.Pitch.to_point_process_peaks`
+parselmouth.PointProcess
+parselmouth.Sound.to_pitch_ac, parselmouth.Pitch.to_point_process_peaks
 )";
 
 constexpr auto TO_POINT_PROCESS_PERIODIC_DOCSTRING =
@@ -60,18 +59,17 @@ algorithm in :func:`~parselmouth.Pitch.to_point_process_cc`.
 
 Parameters
 ----------
-minimum_pitch : float, default=75.0
+minimum_pitch : float, default 75.0
     Minimum fundamental frequency to be considered.
 
-maximum_pitch : float, default=600.0
+maximum_pitch : float, default 600.0
     Maximum fundamental frequency to be considered.
 
 See Also
 --------
 :praat:`Sound: To PointProcess (periodic, cc)...`
-:class:`parselmouth.PointProcess`
-:func:`parselmouth.Sound.to_pitch_cc`
-:func:`parselmouth.Pitch.to_point_process_peaks`
+parselmouth.PointProcess
+parselmouth.Sound.to_pitch_cc, parselmouth.Pitch.to_point_process_peaks
 )";
 
 constexpr auto TO_POINT_PROCESS_PERIODIC_PEAKS_DOCSTRING =
@@ -83,24 +81,23 @@ in `Sound.to_pitch_cc` and the voice cycle detection algorithm in
 
 Parameters
 ----------
-minimum_pitch : float, default=75.0
+minimum_pitch : float, default 75.0
     Minimum fundamental frequency to be considered
 
-maximum_pitch : float, default=600.0
+maximum_pitch : float, default 600.0
     Maximum fundamental frequency to be considered
 
-include_maxima : bool, default=True
+include_maxima : bool, default True
     True to include the absolute maximum
 
-include_minima : bool, default=False
+include_minima : bool, default False
     True to include the absolute minimum
 
 See Also
 --------
 :praat:`Sound: To PointProcess (periodic, peaks)...`
-:class:`parselmouth.PointProcess`
-:func:`parselmouth.Sound.to_pitch_cc`
-:func:`parselmouth.Pitch.to_point_process_peaks`
+parselmouth.PointProcess
+parselmouth.Sound.to_pitch_cc, parselmouth.Pitch.to_point_process_peaks
 )";
 
 constexpr auto TO_POINT_PROCESS_ZEROS_DOCSTRING =
@@ -112,18 +109,106 @@ of the crossing.
 
 Parameters
 ----------
-channel : {"LEFT", "RIGHT"}, default="LEFT" (first channel)
+channel : {"LEFT", "RIGHT"}, default "LEFT" (first channel)
     Sound channel to process
 
-include_raisers : bool, default=True
+include_raisers : bool, default True
     True to detect the rising edges
 
-include_fallers : bool, default=False
+include_fallers : bool, default False
     True to detect the falling edges
 
 See Also
 --------
-:class:`parselmouth.PointProcess`
+parselmouth.PointProcess
+)";
+
+constexpr auto TO_CEPSTRUM_DOCSTRING =
+	R"(Create a new `Cepstrum` instance.
+
+See Also
+--------
+:obj:`parselmouth.Cepstrum`
+)";
+
+constexpr auto TO_LTAS_DOCSTRING =
+	R"(Create a new `Ltas` instance.
+
+Parameter
+---------
+bandwidth : float, default 100.0
+    Bandwidth of LTAS in Hz
+
+See Also
+--------
+:obj:`parselmouth.Ltas`
+:obj:`parselmouth.Sound.to_ltas_pitchcorrected`
+)";
+
+constexpr auto TO_LTAS_PITCHCORRECTED_DOCSTRING =
+	R"(Create a new `Ltas` instance.
+
+It tries to compute an LTAS of the spectral envelope of the voiced parts,
+correcting away the influence of F0 in a way that does not sacrifice
+frequency selectivity. The resulting LTAS is meant to reflect only the
+resonances (formants) in the vocal tract and the envelope of the glottal
+source spectrum.
+
+The analysis method is described in Boersma & Kovacic (2006).
+
+Parameters
+----------
+minimum_pitch : float, default 75.0
+maximum_pitch : float, default 600.0
+maximum_frequency : float, default 5000.0
+bandwidth : float, default 100.0
+shortest_period : float, default 0.0001
+longest_period : float, default 0.02
+maximum_period_factor : float, default 1.3
+
+See Also
+--------
+:praat:`Sound: To Ltas (pitch-corrected)...`
+:obj:`parselmouth.Ltas`
+:obj:`parselmouth.Sound.to_ltas`
+)";
+
+constexpr auto TO_POWER_CEPSTROGRAM_DOCSTRING =
+	R"(Create a new `PowerCepstrum` instance.
+
+The sound will first be resampled to twice the value of `maximum_frequency`
+with the algorithm described at :func:`resample`. After this, pre-emphasis
+is applied with the algorithm described at :func:`pre_emphasize`. For each
+analysis window a Gaussian window is applied and the spectrum is
+calculated. The spectrum is then transformed to a PowerCepstrum with the
+procedure described at :func:`parselmouth.Spectrum.to_powercepstrum`.
+Finally, the values from the PowerCepstrum are stored in the vertical slice
+of the PowerCepstrogram.
+
+Parameters
+----------
+pitch_floor : float, default 60.0
+time_step : float, default 0.002
+maximum_frequency : float, default 5000.0
+pre_emphasis_from : float, default 50.0
+
+See Also
+--------
+:praat:`Sound: To PowerCepstrogram...`
+:obj:`parselmouth.Power Cepstrogram`
+)";
+
+constexpr auto TO_POWER_CEPSTROGRAM_HILLENBRAND_DOCSTRING =
+	R"(Create a new `PowerCepstrum` instance.
+
+Parameters
+----------
+pitch_floor : float, default 60.0
+time_step : float, default 0.002
+
+See Also
+--------
+:obj:`parselmouth.PowerCepstrogram`
 )";
 
 constexpr auto TO_LPC_AUTOCORRELATION_DOCSTRING = R"(Create LPC using autocorrelation method.
