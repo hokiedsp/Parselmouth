@@ -137,6 +137,32 @@ PRAAT_CLASS_BINDING(Pitch) {
 	using signature_cast_placeholder::_;
 
 	// TODO Which constructors? From Sound?
+	def(py::init([](const py::array_t<double, py::array::c_style> &values,
+					Positive<double> dt, double t1, std::optional<double> tmin, std::optional<double> tmax) {
+			auto ndim = values.ndim();
+
+			if (ndim != 2 and values.shape(0) != 2)
+				throw py::value_error("Pitch requires 2-dimensional array");
+
+			auto nt = values.shape(1);
+			double tstart = tmin.value_or(t1);
+			double tend = tmax.value_or(t1 + nt*dt);
+
+			auto pitch = Pitch_create(tstart, tend, nt, dt, t1, 600.0, 2);
+
+			auto f0_ptr = values.data();
+			auto P_ptr = f0_ptr + nt;
+			for (auto i = 0; i < nt; ++i)
+			{
+				auto &frm = pitch->frames[i + 1];
+				auto &c = frm.candidates[1];
+				c.frequency = *(f0_ptr++);
+				frm.intensity = c.strength = *(P_ptr++);
+			}
+
+			return pitch;
+		}),
+		"values"_a, "dt"_a, "t1"_a = 0.0, "tmin"_a = std::nullopt, "tmax"_a = std::nullopt);
 
 	def("to_sound_pulses",
 		[](Pitch self, std::optional<double> fromTime, std::optional<double> toTime) { return Pitch_to_Sound(self, fromTime.value_or(self->xmin), toTime.value_or(self->xmax), false); },
