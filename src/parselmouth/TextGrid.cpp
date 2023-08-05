@@ -36,6 +36,62 @@ using u32ostringstream = std::basic_ostringstream<char32_t>;
 
 namespace parselmouth {
 
+PRAAT_STRUCT_BINDING(TextPoint) {
+	def_readonly("mark", &structTextPoint::mark);
+	def_readonly("x", &structTextPoint::number);
+
+	def("to_list",
+	    [](TextGrid self) { 
+			auto l = py::list();
+			l.append(self->mark);
+			l.append(self->number);
+			return l; });
+}
+
+PRAAT_STRUCT_BINDING(TextInterval) {
+	def_readonly("text", &structTextInterval::text);
+	// def_readonly("xmin", &structTextInterval::xmin); inherits from Function
+	// def_readonly("xmin", &structTextInterval::xmax); inherits from Function
+
+	def("to_list",
+	    [](TextGrid self) { 
+			auto l = py::list();
+			l.append(self->text);
+			l.append(self->xmin);
+			l.append(self->xmax);
+			return l; });
+}
+
+PRAAT_STRUCT_BINDING(TextTier) {
+
+	def(
+	        "__getitem__",
+	        [](TextGrid self, long i) {
+		        try return TextGrid_checkSpecifiedTierIsIntervalTier(self, i + 1);
+		        catch try return TextGrid_checkSpecifiedTierIsPointTier(self, i + 1);
+		        catch throw py::index_error("TextGrid index out of range");
+	        },
+	        "i"_a);
+
+	def("__len__",
+	    [](TextGrid self) { return self->tiers->size; });
+}
+
+PRAAT_STRUCT_BINDING(IntervalTier) {
+
+	def(
+	        "__getitem__",
+	        [](TextGrid self, long i) {
+		        try return TextGrid_checkSpecifiedTierIsIntervalTier(self, i + 1);
+		        catch try return TextGrid_checkSpecifiedTierIsPointTier(self, i + 1);
+		        catch throw py::index_error("TextGrid index out of range");
+	        },
+	        "i"_a);
+
+	def("__len__",
+	    [](TextGrid self) { return self->tiers->size; });
+}
+
 /* NOTES on Praat assumptions:
  *
  * 1) Praat's UI does not allow TextGrids without tiers, but when programming, it seems nice to allow a programmer to have empty TextGrids.
@@ -86,6 +142,17 @@ PRAAT_CLASS_BINDING(TextGrid) {
 	def_static("from_tgt",
 	           fromTgtTextGrid,
 	           "tgt_text_grid"_a);
+
+	def("__getitem__",
+	    [](TextGrid self, long i) {
+		        try return TextGrid_checkSpecifiedTierIsIntervalTier(self, i + 1);
+		        catch try return TextGrid_checkSpecifiedTierIsPointTier(self, i + 1);
+		        catch throw py::index_error("TextGrid index out of range");
+	        },
+	        "i"_a);
+
+	def("__len__",
+	    [](TextGrid self) { return self->tiers->size; });
 }
 
 } // namespace parselmouth

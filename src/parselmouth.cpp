@@ -144,6 +144,10 @@ using PraatBindings = Bindings<PraatError,
                                Formant,
                                CC,
                                MFCC,
+							   TextPoint,
+							   TextInterval,
+							   TextTier,
+							   IntervalTier,
                                TextGrid,
                                PraatModule>;
 
