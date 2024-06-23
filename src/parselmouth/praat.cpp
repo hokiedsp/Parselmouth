@@ -32,6 +32,7 @@
 #include <pybind11/stl.h>
 
 #include <cassert>
+#include <string>
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -98,7 +99,9 @@ py::object autoSTRVECToArray(autoSTRVEC &&vector) {
 		return py::none();
 
 	auto v = vector.get();
-	return py::array_t<py::object>(py::cast(std::vector<char32 *>(v.begin(), v.end())));
+	std::wstring text(v.get());
+	return text
+	// return py::array_t<py::object>(py::cast(std::vector<char32 *>(v.begin(), v.end())));
 }
 
 class PraatEnvironment {
