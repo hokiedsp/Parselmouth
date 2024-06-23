@@ -1,6 +1,14 @@
 Strings, bytes and Unicode conversions
 ######################################
 
+.. note::
+
+    This section discusses string handling in terms of Python 3 strings. For
+    Python 2.7, replace all occurrences of ``str`` with ``unicode`` and
+    ``bytes`` with ``str``.  Python 2.7 users may find it best to use ``from
+    __future__ import unicode_literals`` to avoid unintentionally using ``str``
+    instead of ``unicode``.
+
 Passing Python strings to C++
 =============================
 
@@ -28,13 +36,13 @@ everywhere <http://utf8everywhere.org/>`_.
         }
     );
 
-.. code-block:: pycon
+.. code-block:: python
 
-    >>> utf8_test("🎂")
+    >>> utf8_test('🎂')
     utf-8 is icing on the cake.
     🎂
 
-    >>> utf8_charptr("🍕")
+    >>> utf8_charptr('🍕')
     My favorite food is
     🍕
 
@@ -50,9 +58,9 @@ Passing bytes to C++
 --------------------
 
 A Python ``bytes`` object will be passed to C++ functions that accept
-``std::string`` or ``char*`` *without* conversion.  In order to make a function
-*only* accept ``bytes`` (and not ``str``), declare it as taking a ``py::bytes``
-argument.
+``std::string`` or ``char*`` *without* conversion.  On Python 3, in order to
+make a function *only* accept ``bytes`` (and not ``str``), declare it as taking
+a ``py::bytes`` argument.
 
 
 Returning C++ strings to Python
@@ -72,7 +80,7 @@ raise a ``UnicodeDecodeError``.
         }
     );
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> isinstance(example.std_string_return(), str)
     True
@@ -101,23 +109,19 @@ conversion has the same overhead as implicit conversion.
     m.def("str_output",
         []() {
             std::string s = "Send your r\xe9sum\xe9 to Alice in HR"; // Latin-1
-            py::handle py_s = PyUnicode_DecodeLatin1(s.data(), s.length(), nullptr);
-            if (!py_s) {
-                throw py::error_already_set();
-            }
-            return py::reinterpret_steal<py::str>(py_s);
+            py::str py_s = PyUnicode_DecodeLatin1(s.data(), s.length());
+            return py_s;
         }
     );
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> str_output()
     'Send your résumé to Alice in HR'
 
 The `Python C API
 <https://docs.python.org/3/c-api/unicode.html#built-in-codecs>`_ provides
-several built-in codecs. Note that these all return *new* references, so
-use :cpp:func:`reinterpret_steal` when converting them to a :cpp:class:`str`.
+several built-in codecs.
 
 
 One could also use a third party encoding library such as libiconv to transcode
@@ -139,7 +143,7 @@ returned to Python as ``bytes``, then one can return the data as a
         }
     );
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> example.return_bytes()
     b'\xba\xd0\xba\xd0'
@@ -156,7 +160,7 @@ encoding, but cannot convert ``std::string`` back to ``bytes`` implicitly.
         }
     );
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> isinstance(example.asymmetry(b"have some bytes"), str)
     True
@@ -200,6 +204,11 @@ decoded to Python ``str``.
         }
     );
 
+.. warning::
+
+    Wide character strings may not work as described on Python 2.7 or Python
+    3.3 compiled with ``--enable-unicode=ucs2``.
+
 Strings in multibyte encodings such as Shift-JIS must transcoded to a
 UTF-8/16/32 before being returned to Python.
 
@@ -220,16 +229,16 @@ character.
     m.def("pass_char", [](char c) { return c; });
     m.def("pass_wchar", [](wchar_t w) { return w; });
 
-.. code-block:: pycon
+.. code-block:: python
 
-    >>> example.pass_char("A")
+    >>> example.pass_char('A')
     'A'
 
 While C++ will cast integers to character types (``char c = 0x65;``), pybind11
 does not convert Python integers to characters implicitly. The Python function
 ``chr()`` can be used to convert integers to characters.
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> example.pass_char(0x65)
     TypeError
@@ -250,17 +259,17 @@ a combining acute accent). The combining character will be lost if the
 two-character sequence is passed as an argument, even though it renders as a
 single grapheme.
 
-.. code-block:: pycon
+.. code-block:: python
 
-    >>> example.pass_wchar("é")
+    >>> example.pass_wchar('é')
     'é'
 
-    >>> combining_e_acute = "e" + "\u0301"
+    >>> combining_e_acute = 'e' + '\u0301'
 
     >>> combining_e_acute
     'é'
 
-    >>> combining_e_acute == "é"
+    >>> combining_e_acute == 'é'
     False
 
     >>> example.pass_wchar(combining_e_acute)
@@ -269,9 +278,9 @@ single grapheme.
 Normalizing combining characters before passing the character literal to C++
 may resolve *some* of these issues:
 
-.. code-block:: pycon
+.. code-block:: python
 
-    >>> example.pass_wchar(unicodedata.normalize("NFC", combining_e_acute))
+    >>> example.pass_wchar(unicodedata.normalize('NFC', combining_e_acute))
     'é'
 
 In some languages (Thai for example), there are `graphemes that cannot be
