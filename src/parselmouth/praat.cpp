@@ -33,6 +33,7 @@
 
 #include <cassert>
 #include <string>
+#include <string_view>
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -98,9 +99,10 @@ py::object autoSTRVECToArray(autoSTRVEC &&vector) {
 	if (!vector.elements)
 		return py::none();
 
-	auto v = vector.get();
-	std::wstring text(v.get());
-	return text
+	std::vector<std::basic_string_view> strings(vector.size);
+
+	return py::array_t<py::object>(py::cast(strings));
+
 	// return py::array_t<py::object>(py::cast(std::vector<char32 *>(v.begin(), v.end())));
 }
 
@@ -214,12 +216,31 @@ private:
 };
 
 // Workarounds since GCC (6) doesn't seem to like the brace initialization of the nested anonymous struct
-void fillStackel(structStackel &s, double number) { s.which = Stackel_NUMBER; s.number = number; }
-void fillStackel(structStackel &s, bool boolean) { s.which = Stackel_NUMBER; s.number = boolean; }
-void fillStackel(structStackel &s, const std::u32string &string) { s.which = Stackel_STRING; s._string = Melder_dup(string.c_str()); }
-void fillStackel(structStackel &s, const VEC &vector, bool owned) { s.which = Stackel_NUMERIC_VECTOR; s.owned = owned; s.numericVector = vector; }
-void fillStackel(structStackel &s, const MAT &matrix, bool owned) { s.which = Stackel_NUMERIC_MATRIX, s.owned = owned; s.numericMatrix = matrix; }
-void fillStackel(structStackel &s, const STRVEC &array, bool owned) { s.which = Stackel_STRING_ARRAY, s.owned = owned; s.stringArray = array; }
+void fillStackel(structStackel &s, double number) {
+	s.which = Stackel_NUMBER;
+	s.number = number;
+}
+void fillStackel(structStackel &s, bool boolean) {
+	s.which = Stackel_NUMBER;
+	s.number = boolean;
+}
+void fillStackel(structStackel &s, const std::u32string &string) {
+	s.which = Stackel_STRING;
+	s._string = Melder_dup(string.c_str());
+}
+void fillStackel(structStackel &s, const VEC &vector, bool owned) {
+	s.which = Stackel_NUMERIC_VECTOR;
+	s.owned = owned;
+	s.numericVector = vector;
+}
+void fillStackel(structStackel &s, const MAT &matrix, bool owned) {
+	s.which = Stackel_NUMERIC_MATRIX, s.owned = owned;
+	s.numericMatrix = matrix;
+}
+void fillStackel(structStackel &s, const STRVEC &array, bool owned) {
+	s.which = Stackel_STRING_ARRAY, s.owned = owned;
+	s.stringArray = array;
+}
 
 void PraatEnvironment::toPraatArg(structStackel &stackel, const py::handle &arg) {
 	if (py::isinstance<py::int_>(arg) || py::isinstance<py::float_>(arg))
@@ -253,8 +274,10 @@ void PraatEnvironment::toPraatArg(structStackel &stackel, const py::handle &arg)
 			throw py::value_error("Cannot convert " + std::to_string(array.ndim()) + "-dimensional NumPy array argument\"" + py::cast<std::string>(py::repr(arg)) + "\" to a Praat vector or matrix");
 		}
 	}
-	catch (py::cast_error &) {}
-	catch (py::error_already_set &) {}
+	catch (py::cast_error &) {
+	}
+	catch (py::error_already_set &) {
+	}
 
 	try {
 		auto list = py::cast<py::list>(arg);
@@ -264,8 +287,10 @@ void PraatEnvironment::toPraatArg(structStackel &stackel, const py::handle &arg)
 		}
 		return fillStackel(stackel, array.releaseToAmbiguousOwner(), true);
 	}
-	catch (py::cast_error &) {}
-	catch (py::error_already_set &) {}
+	catch (py::cast_error &) {
+	}
+	catch (py::error_already_set &) {
+	}
 
 	throw py::value_error("Cannot convert argument \"" + py::cast<std::string>(py::repr(arg)) + "\" to a known Praat argument type");
 }
@@ -296,7 +321,7 @@ py::object PraatEnvironment::fromPraatResult(const std::u32string &callbackName,
 		case kInterpreter_ReturnType::VOID_:
 			return py::none();
 		case kInterpreter_ReturnType::OBJECT_:
-			return returnObjects(callbackName);  // TODO Improve, without relying on the callback name?
+			return returnObjects(callbackName); // TODO Improve, without relying on the callback name?
 		case kInterpreter_ReturnType::REAL_:
 			return py::cast(Melder_atof(interceptedInfo.c_str()));
 		case kInterpreter_ReturnType::INTEGER_:
@@ -374,7 +399,7 @@ auto runPraatScript(const std::vector<std::reference_wrapper<structData>> &objec
 	try {
 		Interpreter_readParameters(environment.interpreter(), script);
 		Interpreter_getArgumentsFromArgs(environment.interpreter(), static_cast<int>(praatArgs.size() - 1), praatArgs.data());
-		Interpreter_run(environment.interpreter(), script, false);  // TODO: Is reuseVariables useful for us?
+		Interpreter_run(environment.interpreter(), script, false); // TODO: Is reuseVariables useful for us?
 	}
 	catch (MelderError) {
 		Melder_throw(U"Script not completed.");
@@ -420,9 +445,10 @@ auto runPraatScriptFromFile(const std::vector<std::reference_wrapper<structData>
 }
 
 auto castPraatCommand(const structPraat_Command &command) {
-	// Don't blame me, blame Praat using class1, class2, ... instead of a list
-	#define CAST_CLASS(N) command.class##N->className, command.n##N
-	#define MAYBE_ADD_CLASS(N) if (command.class##N) classes.emplace_back(CAST_CLASS(N))
+// Don't blame me, blame Praat using class1, class2, ... instead of a list
+#define CAST_CLASS(N) command.class##N->className, command.n##N
+#define MAYBE_ADD_CLASS(N) \
+	if (command.class##N) classes.emplace_back(CAST_CLASS(N))
 
 	std::vector<decltype(std::tuple(CAST_CLASS(1)))> classes;
 	MAYBE_ADD_CLASS(1);
@@ -440,39 +466,27 @@ using CastedPraatCommand = decltype(castPraatCommand(std::declval<structPraat_Co
 class PraatModule;
 
 PRAAT_MODULE_BINDING(praat, PraatModule, PRAAT_MODULE_DOCSTRING) {
-	def("call",
-	    [](const std::u32string &command, py::args args, py::kwargs kwargs) { return callPraatCommand({}, command, args, kwargs); },
-	    "command"_a);
+	def("call", [](const std::u32string &command, py::args args, py::kwargs kwargs) { return callPraatCommand({}, command, args, kwargs); }, "command"_a);
 
-	def("call",
-	    [](structData &data, const std::u32string &command, py::args args, py::kwargs kwargs) { return callPraatCommand({ std::ref(data) }, command, args, kwargs); },
-	    "object"_a, "command"_a);
+	def("call", [](structData &data, const std::u32string &command, py::args args, py::kwargs kwargs) { return callPraatCommand({std::ref(data)}, command, args, kwargs); }, "object"_a, "command"_a);
 
 	def("call",
 	    &callPraatCommand,
 	    "objects"_a, "command"_a,
 	    PRAAT_CALL_DOCSTRING);
 
-	def("run",
-	    [](const std::u32string &script, py::args args, py::kwargs kwargs) { return runPraatScriptFromText({}, script, args, kwargs); },
-	    "script"_a);
+	def("run", [](const std::u32string &script, py::args args, py::kwargs kwargs) { return runPraatScriptFromText({}, script, args, kwargs); }, "script"_a);
 
-	def("run",
-	    [](structData &data, const std::u32string &script, py::args args, py::kwargs kwargs) { return runPraatScriptFromText({ std::ref(data) }, script, args, kwargs); },
-	    "object"_a, "script"_a);
+	def("run", [](structData &data, const std::u32string &script, py::args args, py::kwargs kwargs) { return runPraatScriptFromText({std::ref(data)}, script, args, kwargs); }, "object"_a, "script"_a);
 
 	def("run",
 	    &runPraatScriptFromText,
 	    "objects"_a, "script"_a,
 	    PRAAT_RUN_DOCSTRING);
 
-	def("run_file",
-	    [](const std::u32string &path, py::args args, py::kwargs kwargs) { return runPraatScriptFromFile({}, path, args, kwargs); },
-	    "path"_a);
+	def("run_file", [](const std::u32string &path, py::args args, py::kwargs kwargs) { return runPraatScriptFromFile({}, path, args, kwargs); }, "path"_a);
 
-	def("run_file",
-	    [](structData &data, const std::u32string &path, py::args args, py::kwargs kwargs) { return runPraatScriptFromFile({ std::ref(data) }, path, args, kwargs); },
-	    "object"_a, "path"_a);
+	def("run_file", [](structData &data, const std::u32string &path, py::args args, py::kwargs kwargs) { return runPraatScriptFromFile({std::ref(data)}, path, args, kwargs); }, "object"_a, "path"_a);
 
 	def("run_file",
 	    &runPraatScriptFromFile,
