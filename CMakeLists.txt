@@ -18,6 +18,8 @@
 cmake_minimum_required(VERSION 3.18)
 project(Parselmouth)
 
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ version selection")  # or 11, 14, 17, 20
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/res/cmake ${CMAKE_MODULE_PATH})
 
 if (NOT CMAKE_BUILD_TYPE)

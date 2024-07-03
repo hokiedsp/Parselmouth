@@ -30,6 +30,7 @@
 
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 
 #include <cassert>
 #include <string>
@@ -38,11 +39,15 @@
 namespace py = pybind11;
 using namespace py::literals;
 
+PYBIND11_MAKE_OPAQUE(std::vector<std::u32string_view>);
+
+
 namespace parselmouth {
 
 using structData = structDaata;
 using Data = Daata;
 using autoData = autoDaata;
+
 
 namespace {
 
@@ -95,15 +100,28 @@ py::object autoMATToArray(autoMAT &&matrix) {
 	return py::array_t<double, py::array::c_style>({static_cast<size_t>(nrow), static_cast<size_t>(ncol)}, cells, capsule);
 }
 
-py::object autoSTRVECToArray(autoSTRVEC &&vector) {
+auto autoSTRVECToArray(autoSTRVEC &&vector) {
 	if (!vector.elements)
 		return py::none();
 
-	std::vector<std::basic_string_view> strings(vector.size);
 
-	return py::array_t<py::object>(py::cast(strings));
+	auto v = vector.get(); // _stringvector <char32>
+	// return py::array_t<py::object>(py::cast(std::vector<char32 *>(v.begin(), v.end()))); // fails with error: static assertion failed: Attempt to use a non-POD or unimplemented POD type as a numpy dtype
 
-	// return py::array_t<py::object>(py::cast(std::vector<char32 *>(v.begin(), v.end())));
+	// candidate #1: still the same error if casted,
+	// std::vector<std::u32string_view> str_vec;
+	// std::transform(v.begin(), v.end(), std::back_inserter(str_vec), [](auto &s)
+	// 				{ return std::u32string_view(s,std::char_traits<char32>::length(s)); });
+	// return str_vec;
+
+	py::array_t<py::object> str_vec(v.size);
+	std::transform(v.begin(), v.end(), str_vec.begin(), [](auto &s) {
+		py::handle py_s = PyUnicode_DecodeUTF32((char*)s, std::char_traits<char32>::length(s), nullptr, nullptr);
+		if (!py_s) {
+			throw py::error_already_set();
+		}
+		return py::reinterpret_steal<py::str>(py_s);
+	});
 }
 
 class PraatEnvironment {
