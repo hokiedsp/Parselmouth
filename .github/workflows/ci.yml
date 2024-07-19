@@ -155,8 +155,9 @@ jobs:
       - name: Install requirements
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade setuptools wheel
+          pip install --upgrade scikit-build-core setuptools
           pip install --upgrade -r tests/requirements.txt
+          pip list
 
       - name: Select GCC
         if: matrix.gcc
@@ -172,6 +173,9 @@ jobs:
           echo "CC=clang-${{ matrix.clang }}" >> $GITHUB_ENV
           echo "CXX=clang++-${{ matrix.clang }}" >> $GITHUB_ENV
 
+      - name: Setup Ninja meta builder
+        uses: seanmiddleditch/gha-setup-ninja@master
+    
       - name: Setup pytest annotations
         run: |
           pip install pytest-github-actions-annotate-failures
@@ -188,11 +192,12 @@ jobs:
           CMAKE_ARCH="${{ (runner.os == 'Windows' && matrix.arch == 'x86') && '-A Win32' || '' }}"
           CMAKE_BUILD_TYPE="${{ matrix.release && 'Release' || 'Debug' }}"
           CCACHE_BASEDIR="$GITHUB_WORKSPACE"
-          cmake -S . -B build $CMAKE_ARCH -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DPython_EXECUTABLE="$(which python)" -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          pip install -v . --config-settings=cmake.args=-DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE;-DCMAKE_C_COMPILER_LAUNCHER=ccache;-DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+      # cmake -S . -B build $CMAKE_ARCH -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DPython_EXECUTABLE="$(which python)" -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
-      - name: Compile
-        run: |
-          cmake --build build -j 2
+      # - name: Compile
+      #   run: |
+      #     cmake --build build -j 2
 
       - name: Select Praat tests to run
         if: matrix.run-praat-tests
@@ -202,7 +207,8 @@ jobs:
 
       - name: Run tests
         run: |
-          cmake --build build --target tests
+          pytest -vv
+      # cmake --build build --target tests
 
       - name: Setup tmate session
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.tmate && failure() }}
