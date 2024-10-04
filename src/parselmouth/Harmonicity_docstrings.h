@@ -1,3 +1,7 @@
+#pragma once
+#ifndef INC_PARSELMOUTH_HARMONICITY_DOCSTRINGS_H
+#define INC_PARSELMOUTH_HARMONICITY_DOCSTRINGS_H
+
 namespace parselmouth {
 
 
@@ -255,3 +259,4 @@ quantile : double
 )";
 
 }// namespace parselmouth
+#endif //INC_PARSELMOUTH_HARMONICITY_DOCSTRINGS_H

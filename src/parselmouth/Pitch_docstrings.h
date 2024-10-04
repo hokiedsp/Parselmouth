@@ -294,3 +294,5 @@ See Also
 )";
 
 }// namespace parselmouth
+#endif // INC_PARSELMOUTH_PITCH_DOCSTRINGS_H
+
