@@ -142,6 +142,16 @@ PRAAT_CLASS_BINDING(PointProcess) {
 		},
 		"i"_a);
 
+	// Allow adjustment
+	def("__setitem__",
+	    [](PointProcess self, long i, float v) {
+			if (i < 0) i += self->nt;
+			if (i < 0 || i >= self->nt)
+				throw py::index_error("PointProcess index out of range");
+			self->t[i + 1] = v;
+		},
+		"i"_a, "v"_a);
+
 	def("__len__", [](PointProcess self) { return self->nt; });
 
 	// Iterators come for free with the sequence protocol, but this is (apparently) slightly faster
