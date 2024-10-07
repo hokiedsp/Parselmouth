@@ -151,6 +151,8 @@ PRAAT_CLASS_BINDING(PointProcess) {
 		},
 		py::keep_alive<0, 1>());
 
+	def("as_array", [](PointProcess self) { return py::array(self->nt, &self->t[1], py::cast(self)); });
+
 /**
  * Standard arguments for many of the query methods
  */
