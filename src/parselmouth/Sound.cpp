@@ -678,6 +678,27 @@ PRAAT_CLASS_BINDING(Sound) {
 
 	// TODO For some reason praat_David_init.cpp also still contains Sound functionality
 	// TODO Still a bunch of Sound in praat_LPC_init.cpp
+
+
+	def("_get_hann_windowed_rms", 
+		[](Sound me, double tmid, double widthLeft, double widthRight) { 
+			// return Sound_getHannWindowedRms(self, tmid, widthLeft, widthRight); }, 
+			integer imin, imax;
+			if (Sampled_getWindowSamples (me, tmid - widthLeft, tmid + widthRight, & imin, & imax) < 3)
+				return undefined;
+			longdouble sumOfSquares = 0.0, windowSumOfSquares = 0.0;
+			for (integer i = imin; i <= imax; i ++) {
+				double t = my x1 + (i - 1) * my dx;
+				double width = t < tmid ? widthLeft : widthRight;
+				double windowPhase = (t - tmid) / width;   /* in [-1 .. 1] */
+				double window = 0.5 + 0.5 * cos (NUMpi * windowPhase);   /* Hann */
+				double windowedValue = ( my ny == 1 ? my z [1] [i] : 0.5 * (my z [1] [i] + my z [2] [i]) ) * window;
+				sumOfSquares += windowedValue * windowedValue;
+				windowSumOfSquares += window * window;
+			}
+			return sqrt (double (sumOfSquares / windowSumOfSquares));
+		},
+		"tmid"_a, "width_left"_a, "width_right"_a);
 }
 
 } // namespace parselmouth
