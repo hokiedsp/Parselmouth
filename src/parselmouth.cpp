@@ -47,6 +47,8 @@ Thing_declare(Sound);
 Thing_declare(Spectrum);
 Thing_declare(Spectrogram);
 Thing_declare(Vector);
+Thing_declare(RealTier);
+Thing_declare(AmplitudeTier);
 
 using Data = Daata;
 
@@ -143,6 +145,8 @@ using PraatBindings = Bindings<PraatError,
                                PointProcess,
                                Intensity,
                                Harmonicity,
+							   RealTier,
+							   AmplitudeTier,
                                Formant,
                                CC,
                                MFCC,

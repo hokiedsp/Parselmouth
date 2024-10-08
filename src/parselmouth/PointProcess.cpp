@@ -32,6 +32,7 @@
 #include <praat/fon/Sound_PointProcess.h>
 #include <praat/fon/TextGrid.h>
 #include <praat/fon/VoiceAnalysis.h>
+#include <praat/fon/AmplitudeTier.h>
 
 #include <algorithm>
 #include <tuple>
@@ -487,8 +488,14 @@ PRAAT_CLASS_BINDING(PointProcess) {
 	// NEW_PointProcess_upto_IntensityTier
 	// NEW_PointProcess_upto_PitchTier
 	// NEW_PointProcess_upto_TextTier
-	// NEW1_PointProcess_Sound_to_AmplitudeTier_period
 	// NEW1_PointProcess_Sound_to_AmplitudeTier_point
+	def("to_amplitude_tier_point", PointProcess_Sound_to_AmplitudeTier_point, "sound"_a);
+
+	// NEW1_PointProcess_Sound_to_AmplitudeTier_period
+	def("to_amplitude_tier_period",
+	           args_cast<_, _, _, _, _, _, Positive<_>>(PointProcess_Sound_to_AmplitudeTier_period),
+	           "sound"_a, "tmin"_a = 0.0, "tmax"_a = 0.0, "short_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3);
+
 	// NEW1_PointProcess_Sound_to_Ltas
 	// NEW1_PointProcess_Sound_to_Ltas_harmonics
 }

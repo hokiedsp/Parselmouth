@@ -16,6 +16,7 @@
 # along with Parselmouth.  If not, see <http://www.gnu.org/licenses/>
 
 target_sources(parselmouth PRIVATE
+    AmplitudeTier.cpp
     CC.cpp
     Data.cpp
     Formant.cpp
@@ -26,6 +27,7 @@ target_sources(parselmouth PRIVATE
     MFCC.cpp
     Pitch.cpp
     PointProcess.cpp
+    RealTier.cpp
     Sampled.cpp
     SampledXY.cpp
     Sound.cpp
