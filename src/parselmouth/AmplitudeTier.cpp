@@ -74,7 +74,7 @@ PRAAT_CLASS_BINDING(AmplitudeTier) {
 	// 	double tmin, double tmax, double shortestPeriod, double longestPeriod, double maximumPeriodFactor);
 	def_static("from_point_process_period",
 	           args_cast<_, _, _, _, _, _, Positive<_>>(PointProcess_Sound_to_AmplitudeTier_period),
-	           "point_process"_a, "sound"_a, "tmin"_a = 0.0, "tmax"_a = 0.0, "short_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3);
+	           "point_process"_a, "sound"_a, "tmin"_a = 0.0, "tmax"_a = 0.0, "shortest_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3);
 	// REAL (fromTime, U"left Time range (s)", U"0.0") \
 	// REAL (toTime, U"right Time range (s)", U"0.0 (= all)")
 	// REAL (shortestPeriod, U"Shortest period (s)", U"0.0001") \
@@ -88,7 +88,7 @@ PRAAT_CLASS_BINDING(AmplitudeTier) {
 
 
 #define RANGE_ARGS \
-	"period_floor"_a = 0.0001, "period_ceiling"_a = 0.02, "maximum_amplitude_factor"_a = 1.6
+	"shortest_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_amplitude_factor"_a = 1.6
 
 	// double AmplitudeTier_getShimmer_local (AmplitudeTier me, double shortestPeriod, double longestPeriod, double maximumAmplitudeFactor);
 	def("get_shimmer_local",
