@@ -50,13 +50,13 @@ See Also
   "    The end time of the part of the `PointProcess` to be measured in\n"     \
   "    seconds. If `None`, all the points to ``tmax`` are included.\n"         \
   "\n"                                                                         \
-  "period_floor : float, default 0.0001\n"                                    \
+  "shortest_period : float, default 0.0001\n"                                    \
   "    The shortest possible interval to be used in the computation in\n"      \
   "    seconds. If an interval is shorter than this, it will be ignored (and\n"\
   "    the previous and next intervals will not be regarded as consecutive).\n"\
   "    This setting will normally be very small.\n"                            \
   "\n"                                                                         \
-  "period_ceiling : float, default 0.02\n"                                    \
+  "longest_period : float, default 0.02\n"                                    \
   "    The longest possible interval that to be used in the computation in\n"  \
   "    seconds. If an interval is longer than this, it will be ignored (and\n" \
   "    the previous and next intervals will not be regarded as consecutive).\n"\

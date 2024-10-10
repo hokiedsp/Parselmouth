@@ -172,7 +172,7 @@ PRAAT_CLASS_BINDING(PointProcess) {
 		return f(self, fromTime.value_or(self->xmin), toTime.value_or(self->xmax), periodFloor, periodCeiling, maximumPeriodFactor); \
 	}
 #define RANGE_ARGS \
-	"from_time"_a = std::nullopt, "to_time"_a = std::nullopt, "period_floor"_a = 0.0001, "period_ceiling"_a = 0.02, "maximum_period_factor"_a = 1.3
+	"from_time"_a = std::nullopt, "to_time"_a = std::nullopt, "shortest_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3
 #define SHIMMER_RANGE_FUNCTION(f) \
 	[](PointProcess self, Sound sound, std::optional<double> fromTime, std::optional<double> toTime, double periodFloor, double periodCeiling, Positive<double> maximumPeriodFactor, Positive<double> maximumAmplitudeFactor) { \
 		return f(self, sound, fromTime.value_or(self->xmin), toTime.value_or(self->xmax), periodFloor, periodCeiling, maximumPeriodFactor, maximumAmplitudeFactor); \
@@ -494,7 +494,7 @@ PRAAT_CLASS_BINDING(PointProcess) {
 	// NEW1_PointProcess_Sound_to_AmplitudeTier_period
 	def("to_amplitude_tier_period",
 	           args_cast<_, _, _, _, _, _, Positive<_>>(PointProcess_Sound_to_AmplitudeTier_period),
-	           "sound"_a, "tmin"_a = 0.0, "tmax"_a = 0.0, "short_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3);
+	           "sound"_a, "tmin"_a = 0.0, "tmax"_a = 0.0, "shortest_period"_a = 0.0001, "longest_period"_a = 0.02, "maximum_period_factor"_a = 1.3);
 
 	// NEW1_PointProcess_Sound_to_Ltas
 	// NEW1_PointProcess_Sound_to_Ltas_harmonics
