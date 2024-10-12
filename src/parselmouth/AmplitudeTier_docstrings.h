@@ -285,7 +285,7 @@ end_time : float, optional
     The end time of the part of the PointProcess to be measured in
     seconds. If `None`, all the points to ``tmax`` are included.
 
-period_ceiling : float, default 0.02
+longest_period : float, default 0.02
     The longest possible interval that to be used in the computation in
     seconds. If an interval is longer than this, it will be ignored (and
     the previous and next intervals will not be regarded as consecutive).
