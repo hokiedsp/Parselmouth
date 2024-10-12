@@ -269,7 +269,7 @@ PRAAT_CLASS_BINDING(PointProcess) {
 			MelderCountAndFraction out = PointProcess_getCountAndFractionOfVoiceBreaks(self, fromTime.value_or(self->xmin), toTime.value_or(self->xmax), maximumPeriod);
 			return std::make_tuple(out.count, out.numerator / out.denominator, out.numerator, out.denominator);
 		},
-	    "from_time"_a = std::nullopt, "to_time"_a = std::nullopt, "period_ceiling"_a = 0.02,
+	    "from_time"_a = std::nullopt, "to_time"_a = std::nullopt, "longest_period"_a = 0.02,
 	    GET_COUNT_AND_FRACTION_OF_VOICE_BREAKS_DOCSTRING);
 
 	// REAL_Point_Sound_getShimmer_local
