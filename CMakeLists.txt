@@ -66,4 +66,6 @@ add_subdirectory(docs)
 
 if(SKBUILD)
 	install(TARGETS parselmouth LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX})
+	install(CODE "execute_process(COMMAND pybind11-stubgen -o ${CMAKE_INSTALL_PREFIX} parselmouth
+                                  COMMAND_ECHO STDOUT)")
 endif()
