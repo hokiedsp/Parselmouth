@@ -50,6 +50,71 @@ PRAAT_CLASS_BINDING(Formant) {
 	def("get_bandwidth_at_time",
 	    args_cast<_, Positive<_>, _, _>(Formant_getBandwidthAtTime),
 	    "formant_number"_a, "time"_a, "unit"_a = kFormant_unit::HERTZ);
-}
+
+	def("get_min_num_formants", &Formant_getMinNumFormants);
+	def("get_max_num_formants", &Formant_getMaxNumFormants);
+
+	def("get_extrema",
+	    [](Formant me, Positive<integer> formantNumber, double tmin, double tmax) {
+			double fmin, fmax;
+			Formant_getExtrema(me, formantNumber, tmin, tmax, &fmin, &fmax);
+
+			return py::make_tuple(fmin, fmax);
+	    },
+	    "formant_number"_a, "tmin"_a, "tmax"_a);
+
+	// not part of Praat API?
+	// void Formant_getMinimumAndTime (Formant me, integer formantNumber, double tmin, double tmax, kFormant_unit unit, int interpolate,
+	// 	double *return_minimum, double *return_timeOfMinimum);
+	// void Formant_getMaximumAndTime (Formant me, integer formantNumber, double tmin, double tmax, kFormant_unit unit, int interpolate,
+	// 	double *return_maximum, double *return_timeOfMaximum);
+
+	def("get_minimum", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _, _>(Formant_getMinimum),
+	    "formant_number"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ, "interpolate"_a);
+	def("get_maximum", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _, _>(Formant_getMaximum),
+	    "formant_number"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ, "interpolate"_a);
+	def("get_time_of_maximum", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _, _>(Formant_getTimeOfMaximum),
+	    "formant_number"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ, "interpolate"_a);
+	def("get_time_of_minimum", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _, _>(Formant_getTimeOfMinimum),
+	    "formant_number"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ, "interpolate"_a);
+	def("get_quantile", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _, _>(Formant_getQuantile),
+	    "formant_number"_a, "quantile"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ);
+	def("get_quantile_of_bandwidth", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _, _>(Formant_getQuantileOfBandwidth),
+	    "formant_number"_a, "quantile"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ);
+	def("get_mean", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _>(Formant_getMean),
+	    "formant_number"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ);
+	def("get_standard_deviation", // TODO Enum for Hertz vs. Bark?
+	    args_cast<_, Positive<_>, _, _, _>(Formant_getStandardDeviation),
+	    "formant_number"_a, "tmin"_a, "tmax"_a, "unit"_a = kFormant_unit::HERTZ);
+
+	// void Formant_sort (Formant me);
+
+	// autoMatrix Formant_to_Matrix (Formant me, integer iformant);
+	// autoMatrix Formant_to_Matrix_bandwidths (Formant me, integer iformant);
+
+	// autoFormant Formant_tracker (Formant me, integer numberOfTracks,
+	// 	double refF1, double refF2, double refF3, double refF4, double refF5,
+	// 	double dfCost,   // per kHz
+	// 	double bfCost, double octaveJumpCost);
+
+	// autoTable Formant_downto_Table (Formant me, bool includeFrameNumbers,
+	// 	bool includeTimes, integer timeDecimals,
+	// 	bool includeIntensity, integer intensityDecimals,
+	// 	bool includeNumberOfFormants, integer frequencyDecimals,
+	// 	bool includeBandwidths);
+	// void Formant_list (Formant me, bool includeFrameNumbers,
+	// 	bool includeTimes, integer timeDecimals,
+	// 	bool includeIntensity, integer intensityDecimals,
+	// 	bool includeNumberOfFormants, integer frequencyDecimals,
+	// 	bool includeBandwidths);
+
+	}
 
 } // namespace parselmouth
