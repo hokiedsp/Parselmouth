@@ -47,6 +47,11 @@ Thing_declare(Sound);
 Thing_declare(Spectrum);
 Thing_declare(Spectrogram);
 Thing_declare(Vector);
+Thing_declare(Cepstrum);
+Thing_declare(Cepstrogram);
+Thing_declare(PowerCepstrum);
+Thing_declare(PowerCepstrogram);
+
 
 using Data = Daata;
 
@@ -145,7 +150,11 @@ using PraatBindings = Bindings<PraatError,
                                CC,
                                MFCC,
                                TextGrid,
-                               PraatModule>;
+                               PraatModule,
+							   Cepstrum,
+							   Cepstrogram,
+							   PowerCepstrum,
+							   PowerCepstrogram>;
 
 } // namespace parselmouth
 

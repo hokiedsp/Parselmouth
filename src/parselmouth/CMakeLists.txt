@@ -35,4 +35,8 @@ target_sources(parselmouth PRIVATE
     Thing.cpp
     Vector.cpp
     praat.cpp
+    Cepstrum.cpp
+    Cepstrogram.cpp
+    PowerCepstrum.cpp
+    PowerCepstrogram.cpp
 )
