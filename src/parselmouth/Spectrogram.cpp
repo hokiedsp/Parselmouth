@@ -74,13 +74,11 @@ PRAAT_CLASS_BINDING(BandFilterSpectrogram) {
 }
 
 PRAAT_CLASS_BINDING(BarkSpectrogram) {
-	addTimeFrameSampledMixin(*this);
 
 	using signature_cast_placeholder::_;
 }
 
 PRAAT_CLASS_BINDING(MelSpectrogram) {
-	addTimeFrameSampledMixin(*this);
 
 	using signature_cast_placeholder::_;
 }
