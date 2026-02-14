@@ -47,11 +47,15 @@ Thing_declare(Sound);
 Thing_declare(Spectrum);
 Thing_declare(Spectrogram);
 Thing_declare(Vector);
+Thing_declare(ComplexSpectrogram);
 Thing_declare(Cepstrum);
 Thing_declare(Cepstrogram);
 Thing_declare(PowerCepstrum);
 Thing_declare(PowerCepstrogram);
-
+Thing_declare(BandFilterSpectrogram);
+Thing_declare(BarkSpectrogram);
+Thing_declare(MelSpectrogram);
+Thing_declare(Ltas);
 
 using Data = Daata;
 
@@ -143,6 +147,9 @@ using PraatBindings = Bindings<PraatError,
                                Sound,
                                Spectrum,
                                Spectrogram,
+							   BandFilterSpectrogram,
+							   BarkSpectrogram,
+							   MelSpectrogram,
                                Pitch,
                                Intensity,
                                Harmonicity,
@@ -151,10 +158,12 @@ using PraatBindings = Bindings<PraatError,
                                MFCC,
                                TextGrid,
                                PraatModule,
+							   ComplexSpectrogram,
 							   Cepstrum,
 							   Cepstrogram,
 							   PowerCepstrum,
-							   PowerCepstrogram>;
+							   PowerCepstrogram,
+							   Ltas>;
 
 } // namespace parselmouth
 

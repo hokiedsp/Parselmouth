@@ -26,6 +26,7 @@
 #include <praat/fon/Sound_and_Spectrogram.h>
 #include <praat/fon/Spectrogram.h>
 #include <praat/fon/Spectrum_and_Spectrogram.h>
+#include <praat/dwtools/Spectrogram_extensions.h>
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -64,6 +65,24 @@ PRAAT_CLASS_BINDING(Spectrogram) {
 	// TODO TimeFunction
 }
 
-// TODO Spectrogram_extension: BandFilterSpectrogram, BarkSpectrogram, MelSpectrogram
+// Spectrogram_extension
+
+PRAAT_CLASS_BINDING(BandFilterSpectrogram) {
+	addTimeFrameSampledMixin(*this);
+
+	using signature_cast_placeholder::_;
+}
+
+PRAAT_CLASS_BINDING(BarkSpectrogram) {
+	addTimeFrameSampledMixin(*this);
+
+	using signature_cast_placeholder::_;
+}
+
+PRAAT_CLASS_BINDING(MelSpectrogram) {
+	addTimeFrameSampledMixin(*this);
+
+	using signature_cast_placeholder::_;
+}
 
 } // namespace parselmouth
