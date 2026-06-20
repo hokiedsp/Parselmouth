@@ -18,6 +18,7 @@
 
 #include "GraphicsP.h"
 #include <time.h>	/* For creation date. */
+#include <fmt/printf.h>
 #include "Printer.h"
 
 Thing_implement (GraphicsPostscript, Graphics, 0);
@@ -133,7 +134,9 @@ autoGraphics Graphics_create_postscriptjob (MelderFile file, int resolution, kGr
 	time_t today;
 	my postScript = true, my yIsZeroAtTheTop = false, my languageLevel = 2;
 	my job = true, my eps = false, my printer = false;
-	my d_vprintf = [](FILE *stream, const char *format, fmt::printf_args args) { return fmt::vfprintf(stream, format, args); };  // my d_printf (int (*)(void *, const char*, ...)) fprintf;
+	// my d_printf = (int (*)(void *, const char*, ...)) fprintf;
+	// my d_vprintf = [](FILE *stream, const char *format, fmt::printf_args args) { return fmt::vfprintf(stream, format, args); };  
+	my d_vprintf = [](FILE *stream, const char *format, fmt::basic_format_args<fmt::printf_context> args) { return fmt::vfprintf(stream, fmt::string_view(format), args); };
 	Graphics_init (me.get(), resolution);   // virtual resolution; may differ from that of the printer; OK if always 600 dpi
 	my photocopyable = spots == kGraphicsPostscript_spots::PHOTOCOPYABLE;
 	if (my photocopyable) { my spotsDensity = 85; my spotsAngle = 35; }
@@ -211,7 +214,8 @@ autoGraphics Graphics_create_epsfile (MelderFile file, int resolution, enum kGra
 		/* Replace newlines with carriage returns to be compatible with MS Word 5.1. */
 		my d_vprintf = Eps_postScript_printf;
 	#else
-		my d_vprintf = [](FILE *stream, const char *format, fmt::printf_args args) { return fmt::vfprintf(stream, format, args); };  // my d_printf = (int (*)(void *, const char*, ...)) fprintf;
+		// my d_vprintf = [](FILE *stream, const char *format, fmt::printf_args args) { return fmt::vfprintf(stream, format, args); };  // my d_printf = (int (*)(void *, const char*, ...)) fprintf;
+		my d_vprintf = [](FILE *stream, const char *format, fmt::basic_format_args<fmt::printf_context> args) { return fmt::vfprintf(stream, fmt::string_view(format), args); };
 	#endif
 	Graphics_init (me.get(), resolution);   // virtual resolution; may differ from that of the printer; OK if always 600 dpi
 	my photocopyable = spots == kGraphicsPostscript_spots::PHOTOCOPYABLE;
