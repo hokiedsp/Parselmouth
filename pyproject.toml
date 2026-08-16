@@ -15,7 +15,7 @@ license-files = [
     "praat/main/GNU_General_Public_License.txt",
     "praat/main/gpl-3.0.txt",
     "pybind11/LICENSE",
-    "extern/fmt/LICENSE.rst"
+    "extern/fmt/LICENSE"
 ]
 authors = [
     { name = "Yannick Jadoul", email = "yannick.jadoul@gmail.com" },
